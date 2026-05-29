@@ -18,3 +18,7 @@ coverage
 dev-dist
 .omc/state
 .omc/logs
+
+# tsc emit from referenced project (vite.config.ts → js/d.ts artifacts)
+vite.config.js
+vite.config.d.ts
