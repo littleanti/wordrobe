@@ -52,39 +52,42 @@
 ### 4.1 작업 분해
 
 **[A] 인프라**
-- [ ] PWA manifest + 아이콘셋 (192/512)
-- [ ] vite-plugin-pwa, Workbox precache
-- [ ] CSP 헤더 (`_headers` 파일)
+- [x] PWA manifest + 아이콘셋 (192/512) — manifest 등록, 아이콘은 임시 SVG (PNG 192/512 추후)
+- [x] vite-plugin-pwa, Workbox precache
+- [x] CSP 헤더 (`public/_headers`)
 
 **[B] 저장소 레이어**
-- [ ] Dexie 스키마 (`phrases`, `persona`, `settings`)
-- [ ] Repo 패턴 (`PhraseRepo`, `PersonaRepo`, `SettingsRepo`) — Storage 어댑터 격리
-- [ ] JSON export/import
+- [x] Dexie 스키마 (`phrases`, `persona`) + Settings는 localStorage
+- [x] Repo 패턴 (`phraseRepo`, `personaRepo`, `settingsRepo`)
+- [x] JSON export/import
 
 **[C] LLM 클라이언트**
-- [ ] `@google/genai` 통합
-- [ ] 스트리밍 응답 처리
-- [ ] 키 마스킹 + 에러 분류 (401, 429, 5xx)
-- [ ] CSP `connect-src` 화이트리스트
+- [x] `@google/genai` 통합 (`src/lib/gemini.ts`)
+- [x] 스트리밍 응답 처리 (`stream()` async generator)
+- [x] 키 마스킹 + 에러 분류 (401/429/5xx/network/unknown)
+- [x] CSP `connect-src` 화이트리스트
 
 **[D] 페르소나 엔진**
-- [ ] 분석 프롬프트 v1 (TRD §6.1)
-- [ ] 구조화 출력 → PERSONA.md 렌더러
-- [ ] 디바운스 + 증분 캐시
-- [ ] 수동 트리거 버튼
+- [x] 분석 프롬프트 v1 (`src/lib/prompts.ts`)
+- [x] 구조화 출력(`responseSchema`) → PERSONA.md 렌더러
+- [x] 디바운스 (30초, `scheduleAutoAnalyze`)
+- [x] 수동 트리거 버튼 (페르소나 페이지)
+- [ ] 증분 캐시 (현재는 전체 분석 — 비용 체감 후 결정, D-03)
 
 **[E] UI**
-- [ ] 첫 진입 온보딩 (API 키 입력 + 프라이버시 설명)
-- [ ] 3-탭 셸 (글귀 / 페르소나 / 변환)
-- [ ] 글귀 추가 모달 (텍스트 + 출처 URL)
-- [ ] 글귀 리스트 + MiniSearch 검색
-- [ ] 페르소나 마크다운 뷰어/에디터
-- [ ] 변환 화면 (입력창 + 결과 1~3안 + 복사)
+- [x] 첫 진입 온보딩 (API 키 입력 + 프라이버시 설명)
+- [x] 3-탭 셸 (글귀 / 페르소나 / 변환)
+- [x] 글귀 추가 모달 (텍스트 + 출처 URL + 태그)
+- [x] 글귀 리스트 + 검색 (단순 includes; MiniSearch는 100+건에서 도입)
+- [x] 페르소나 마크다운 뷰어/에디터 (수동 편집 지원)
+- [x] 변환 화면 (입력창 + 스트리밍 + 1~3안 + 복사)
+- [x] 토스트 시스템
 
 **[F] 품질**
-- [ ] Vitest: 저장소·페르소나 엔진 단위 테스트
-- [ ] Playwright: 핵심 플로우 (글귀 추가 → 페르소나 생성 → 변환)
-- [ ] Lighthouse PWA 점수 90+
+- [x] Vitest: 프롬프트 파서 / 렌더러 6 테스트 통과
+- [ ] Vitest: 저장소 (`fake-indexeddb` 필요) — 도입 보류
+- [ ] Playwright: 핵심 플로우 — M1 후반
+- [ ] Lighthouse PWA 점수 90+ — 배포 후 측정
 
 ### 4.2 종료 조건
 - 자기 자신이 일주일 dogfood 가능 (글귀 10개 이상 저장, 매일 2~3회 변환)

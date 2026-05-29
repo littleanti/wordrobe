@@ -2,6 +2,10 @@ import { NavLink, Navigate, Route, Routes } from 'react-router-dom';
 import PhrasesPage from './routes/PhrasesPage';
 import PersonaPage from './routes/PersonaPage';
 import ComposePage from './routes/ComposePage';
+import OnboardingModal from './components/OnboardingModal';
+import ToastContainer from './components/Toast';
+import ApiKeyStatus from './components/ApiKeyStatus';
+import { useApp } from './lib/store';
 
 const tabs = [
   { to: '/phrases', label: '글귀' },
@@ -10,14 +14,16 @@ const tabs = [
 ];
 
 export default function App() {
+  const hasKey = useApp((s) => s.settings.apiKey.length > 0);
+
   return (
     <div className="min-h-dvh flex flex-col">
-      <header className="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+      <header className="px-6 py-4 border-b border-slate-800 flex items-center justify-between gap-4">
         <div className="flex items-center gap-2">
           <span className="text-xl">👔</span>
           <h1 className="font-semibold tracking-tight">Wordrobe</h1>
         </div>
-        <span className="text-xs text-slate-500">v0.0.1 · M0</span>
+        <ApiKeyStatus />
       </header>
 
       <nav className="flex border-b border-slate-800">
@@ -50,6 +56,9 @@ export default function App() {
       <footer className="px-6 py-3 text-xs text-slate-500 border-t border-slate-800">
         모든 데이터는 이 기기에만 저장됩니다. LLM 호출은 브라우저 → Google AI Studio 직통.
       </footer>
+
+      {!hasKey && <OnboardingModal />}
+      <ToastContainer />
     </div>
   );
 }
