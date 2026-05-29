@@ -89,9 +89,11 @@
   - `background.ts` (service worker): 컨텍스트 메뉴 등록, 저장 처리
   - `popup.html` → 웹앱의 미니 라우트 (`/#/popup`)
   - `content-script.ts`: 선택 텍스트 추출 보조 (필요 시)
-- **데이터 공유 전략**:
-  - 옵션 A (단순): 웹앱과 익스텐션이 같은 origin → IndexedDB 공유 안 됨 (extension은 chrome-extension://). 익스텐션은 `chrome.storage.local` 사용, 웹앱 진입 시 import.
-  - 옵션 B (추천): 익스텐션 팝업이 웹앱 origin을 iframe으로 임베드 → IndexedDB 단일 소스. → [[trd-storage]]
+- **데이터 공유 전략 (확정: iframe-bridge)**:
+  - 익스텐션 팝업이 웹앱 origin(`https://wordrobe.app`)을 iframe으로 임베드 → 웹앱과 익스텐션이 **동일 IndexedDB**를 공유.
+  - 익스텐션 → iframe 간 통신은 `postMessage` (origin 검증 필수).
+  - 컨텍스트 메뉴에서 캡처한 텍스트는 background SW → popup iframe `postMessage` 로 전달 후 IndexedDB write.
+  - 백업 경로: 네트워크 단절 등 iframe 로드 실패 시 `chrome.storage.local` 큐잉 → 다음 연결 시 flush.
 
 ### 4.3 iOS (App Store)
 
@@ -102,12 +104,11 @@
   - `@capacitor/clipboard`
 - 빌드: Xcode 필요 (Mac 빌드 환경). → [[plan-mobile-build]]
 
-### 4.4 Android (Play Store)
+### 4.4 Android (Play Store) — 확정: Capacitor
 
-- 두 갈래:
-  - **TWA (Trusted Web Activity)**: 순수 PWA를 그대로. 공유 시트 수신은 manifest의 `share_target`으로 가능.
-  - **Capacitor**: iOS와 코드 공유 측면에서 단일화.
-- 권장: iOS와 동일 Capacitor 라인으로 통일. (코드/CI 단순화)
+- iOS와 동일한 Capacitor 라인으로 통일 → 단일 CI/코드 경로.
+- AndroidManifest의 `intent-filter` (`ACTION_SEND`, `text/plain`) 로 공유 인텐트 수신.
+- Bubblewrap/TWA 경로는 채택하지 않음 (코드 분기·CI 이중화 비용이 출시 속도 이득보다 큼).
 
 ### 4.5 공유 시트 텍스트 수신 (모바일)
 
@@ -293,12 +294,12 @@ Task:
 
 ## 13. 결정 필요 사항
 
-| ID | 결정 | 보류 사유 |
+| ID | 결정 | 상태 |
 |---|---|---|
-| D-01 | Android: Capacitor vs TWA | 출시 속도 vs iOS와의 코드 통일성 |
-| D-02 | 익스텐션 ↔ 웹앱 저장소 공유: iframe-bridge vs 수동 import | UX vs 보안 검토 필요 |
-| D-03 | 페르소나 분석 빈도 기본값 | 사용자 API 비용 체감 테스트 필요 |
-| D-04 | 도메인명 | 상표·가용성 확인 후 [[prd]] 의 작업명 확정 |
+| D-01 | Android 패키징 → **Capacitor** | ✅ 확정 2026-05-29. iOS와 단일 코드/CI. |
+| D-02 | 익스텐션 ↔ 웹앱 저장소 → **iframe-bridge** | ✅ 확정 2026-05-29. IndexedDB 단일 소스. |
+| D-03 | 페르소나 분석 빈도 기본값 | ⏳ M1 dogfood에서 결정 |
+| D-04 | 도메인명 → Wordrobe | ✅ 확정 2026-05-29. `wordrobe.app` 가용성은 사용자 확인 대기. |
 
 ---
 

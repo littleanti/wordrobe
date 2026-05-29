@@ -37,9 +37,9 @@
 - [x] git 초기화 (local `main`)
 - [ ] GitHub remote 생성 + 푸시 — **사용자 작업**
 - [ ] Cloudflare Pages 연결 — **사용자 작업**
-- [ ] TRD §13 결정 사항 일부 확정:
-  - D-01 Android 패키징 방식 — **답변 필요**
-  - D-02 익스텐션 저장소 전략 — **답변 필요**
+- [x] TRD §13 결정 사항 확정:
+  - D-01 Android 패키징 → **Capacitor** (iOS와 통일)
+  - D-02 익스텐션 저장소 → **iframe-bridge** (IndexedDB 단일 소스)
 
 ### 종료 조건
 - `npm run dev` 로 3-탭 셸이 뜬다 ✅ (이번 세션에서 검증)
