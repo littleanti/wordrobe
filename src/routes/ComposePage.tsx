@@ -15,6 +15,7 @@ export default function ComposePage() {
   const [streaming, setStreaming] = useState(false);
   const [rawOutput, setRawOutput] = useState('');
   const [persona, setPersona] = useState<PersonaMemory | null>(null);
+  const [submittedInput, setSubmittedInput] = useState('');
 
   useEffect(() => {
     personaRepo.getLatest().then((p) => setPersona(p ?? null));
@@ -28,6 +29,7 @@ export default function ComposePage() {
       pushToast('변환할 문장을 입력하세요.', 'error');
       return;
     }
+    setSubmittedInput(trimmed);
     setRawOutput('');
     setStreaming(true);
     try {
@@ -54,87 +56,138 @@ export default function ComposePage() {
     }
   };
 
-  return (
-    <section className="max-w-2xl mx-auto">
-      <label className="block text-xs text-slate-400 mb-1">대충 쓴 문장</label>
-      <textarea
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        rows={4}
-        placeholder="여기에 자유롭게 쓰세요. 페르소나 톤으로 다듬어드립니다."
-        className="w-full bg-slate-900 border border-slate-800 rounded-md px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-indigo-400 resize-y"
-      />
+  const indexChips = ['①', '②', '③', '④', '⑤'];
 
-      <div className="flex items-center justify-between mt-3 mb-3">
-        <div className="flex items-center gap-3 text-xs text-slate-400">
-          <label className="flex items-center gap-2">
-            모델
-            <select
-              value={settings.model}
-              onChange={(e) => setSettings({ model: e.target.value as GeminiModel })}
-              className="bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs"
-            >
-              <option value="gemini-2.5-flash">Flash</option>
-              <option value="gemini-2.5-pro">Pro</option>
-            </select>
-          </label>
-          <label className="flex items-center gap-2">
-            안 수
-            <select
-              value={variantCount}
-              onChange={(e) => setVariantCount(Number(e.target.value))}
-              className="bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs"
-            >
-              <option value={1}>1</option>
-              <option value={2}>2</option>
-              <option value={3}>3</option>
-            </select>
-          </label>
+  return (
+    <section className="max-w-2xl mx-auto px-4 py-6 space-y-4">
+      {/* No persona notice */}
+      {!persona && (
+        <div className="rounded-2xl px-4 py-3 bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20">
+          <p className="text-xs text-amber-400/90">
+            페르소나가 아직 없습니다. 결과는 일반 톤으로 나옵니다.{' '}
+            <span className="text-amber-300">글귀 탭에서 글귀를 모은 뒤 페르소나 탭에서 분석해보세요.</span>
+          </p>
         </div>
-        <button
-          onClick={onCompose}
-          disabled={streaming || !settings.apiKey}
-          className="px-4 py-2 bg-indigo-500 hover:bg-indigo-400 disabled:bg-slate-700 text-white text-sm rounded-md"
-        >
-          {streaming ? '변환 중...' : '✨ 멋지게'}
-        </button>
+      )}
+
+      {/* Input area */}
+      <div className="rounded-2xl bg-zinc-900/60 border border-zinc-800/60 overflow-hidden">
+        <textarea
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          rows={5}
+          placeholder="자유롭게 쓰세요…"
+          className="w-full bg-transparent px-5 pt-4 pb-2 text-sm text-zinc-100 placeholder:text-zinc-600 focus:outline-none resize-none leading-relaxed"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) onCompose();
+          }}
+        />
+
+        {/* Controls row */}
+        <div className="px-4 pb-3 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3 text-xs text-zinc-500">
+            <label className="flex items-center gap-1.5">
+              모델
+              <select
+                value={settings.model}
+                onChange={(e) => setSettings({ model: e.target.value as GeminiModel })}
+                className="bg-zinc-800 border border-zinc-700/60 rounded-lg px-2 py-1 text-xs text-zinc-300 focus:outline-none"
+              >
+                <option value="gemini-2.5-flash">Flash</option>
+                <option value="gemini-2.5-pro">Pro</option>
+              </select>
+            </label>
+            <label className="flex items-center gap-1.5">
+              안 수
+              <select
+                value={variantCount}
+                onChange={(e) => setVariantCount(Number(e.target.value))}
+                className="bg-zinc-800 border border-zinc-700/60 rounded-lg px-2 py-1 text-xs text-zinc-300 focus:outline-none"
+              >
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+              </select>
+            </label>
+          </div>
+
+          <button
+            onClick={onCompose}
+            disabled={streaming || !settings.apiKey}
+            className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-wordrobe-gradient shadow-glow-sm disabled:opacity-40 disabled:shadow-none transition-opacity hover:opacity-90 active:opacity-80"
+          >
+            {streaming ? '변환 중…' : '✨ 멋지게'}
+          </button>
+        </div>
       </div>
 
-      {!persona && (
-        <p className="text-xs text-amber-400 mb-3">
-          페르소나가 아직 없습니다. 결과는 일반 톤으로 나옵니다. 글귀 탭에서 글귀를 모은 뒤 페르소나 탭에서 분석해보세요.
-        </p>
-      )}
-
-      {streaming && variants.length === 0 && (
-        <p className="text-slate-500 text-sm">스트리밍 시작 대기 중...</p>
-      )}
-
-      {variants.length > 0 && (
+      {/* Chat thread results */}
+      {(variants.length > 0 || streaming || submittedInput) && (
         <div className="space-y-3">
-          {variants.map((v) => (
-            <article key={v.index} className="bg-slate-900 border border-slate-800 rounded-lg p-4">
-              <div className="flex items-start justify-between gap-3">
-                <p className="text-sm text-slate-100 whitespace-pre-wrap leading-relaxed flex-1">
-                  <span className="text-indigo-300 mr-2">{['①', '②', '③', '④', '⑤'][v.index - 1]}</span>
-                  {v.text}
-                </p>
-                <button
-                  onClick={() => onCopy(v.text)}
-                  className="text-xs text-slate-400 hover:text-indigo-300 whitespace-nowrap"
-                >
-                  복사
-                </button>
+          {/* User bubble (original input) */}
+          {submittedInput && (
+            <div className="flex justify-end">
+              <div className="max-w-[80%] rounded-2xl rounded-tr-sm bg-zinc-800/80 px-4 py-3">
+                <p className="text-sm text-zinc-400 leading-relaxed whitespace-pre-wrap">{submittedInput}</p>
               </div>
-            </article>
-          ))}
-        </div>
-      )}
+            </div>
+          )}
 
-      {!streaming && rawOutput && variants.length === 0 && (
-        <pre className="bg-slate-900 border border-slate-800 rounded-lg p-4 text-sm text-slate-200 whitespace-pre-wrap leading-relaxed">
-          {rawOutput}
-        </pre>
+          {/* Streaming waiting state */}
+          {streaming && variants.length === 0 && (
+            <div className="flex justify-start">
+              <div className="rounded-2xl rounded-tl-sm border border-zinc-700/60 px-4 py-3 bg-zinc-900/60">
+                <div className="flex gap-1 items-center">
+                  <span className="w-1.5 h-1.5 rounded-full bg-pink-500 animate-pulse" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse [animation-delay:150ms]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse [animation-delay:300ms]" />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Variant bubbles */}
+          {variants.map((v, idx) => {
+            const isLast = idx === variants.length - 1;
+            const isPulsing = streaming && isLast;
+            return (
+              <div key={v.index} className="flex justify-start">
+                <div className={`max-w-[85%] relative rounded-2xl rounded-tl-sm overflow-hidden ${isPulsing ? 'animate-pulse' : ''}`}>
+                  {/* Gradient border */}
+                  <div className="absolute inset-0 bg-wordrobe-gradient opacity-30 rounded-2xl rounded-tl-sm" />
+                  <div className="relative bg-zinc-900/90 m-[1px] rounded-2xl rounded-tl-sm px-4 py-3">
+                    {/* Index chip */}
+                    <span className="inline-block text-xs font-bold bg-clip-text text-transparent bg-wordrobe-gradient mb-2">
+                      {indexChips[v.index - 1] ?? v.index}
+                    </span>
+                    <p className="text-sm text-zinc-100 leading-relaxed whitespace-pre-wrap">{v.text}</p>
+                    <div className="flex justify-end mt-2">
+                      <button
+                        onClick={() => onCopy(v.text)}
+                        className="text-xs text-zinc-600 hover:text-zinc-400 transition-colors flex items-center gap-1"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3 h-3">
+                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                        </svg>
+                        복사
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+
+          {/* Fallback raw output */}
+          {!streaming && rawOutput && variants.length === 0 && (
+            <div className="flex justify-start">
+              <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-zinc-900/60 border border-zinc-800/60 px-4 py-3">
+                <pre className="text-sm text-zinc-200 whitespace-pre-wrap leading-relaxed">{rawOutput}</pre>
+              </div>
+            </div>
+          )}
+        </div>
       )}
     </section>
   );

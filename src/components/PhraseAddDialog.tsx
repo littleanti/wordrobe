@@ -15,6 +15,7 @@ export default function PhraseAddDialog({ open, onClose, onSaved, initialText }:
   const [url, setUrl] = useState('');
   const [tagsRaw, setTagsRaw] = useState('');
   const [saving, setSaving] = useState(false);
+  const [showExtra, setShowExtra] = useState(false);
 
   const settings = useApp((s) => s.settings);
   const pushToast = useApp((s) => s.pushToast);
@@ -41,6 +42,7 @@ export default function PhraseAddDialog({ open, onClose, onSaved, initialText }:
       setText('');
       setUrl('');
       setTagsRaw('');
+      setShowExtra(false);
       onSaved();
       onClose();
     } catch (err) {
@@ -51,55 +53,82 @@ export default function PhraseAddDialog({ open, onClose, onSaved, initialText }:
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-950/80 z-30 flex items-center justify-center p-4">
-      <div className="max-w-lg w-full bg-slate-900 border border-slate-800 rounded-xl p-5">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-medium">글귀 추가</h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-200 text-xl leading-none">
+    /* Backdrop */
+    <div
+      className="fixed inset-0 bg-zinc-950/70 backdrop-blur-sm z-40 flex items-end justify-center"
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      {/* Bottom sheet */}
+      <div className="w-full max-w-lg bg-zinc-900 border border-zinc-800/60 rounded-t-3xl shadow-glow animate-slide-up">
+        {/* Drag handle */}
+        <div className="flex justify-center pt-3 pb-1">
+          <div className="w-10 h-1 rounded-full bg-zinc-700" />
+        </div>
+
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 py-3">
+          <h3 className="font-semibold text-zinc-100 text-base">글귀 추가</h3>
+          <button
+            onClick={onClose}
+            className="w-7 h-7 flex items-center justify-center rounded-full bg-zinc-800 text-zinc-400 hover:text-zinc-200 transition-colors text-lg leading-none"
+          >
             ×
           </button>
         </div>
 
-        <label className="block text-xs text-slate-400 mb-1">본문</label>
-        <textarea
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          rows={6}
-          placeholder="멋지다고 느낀 글귀를 붙여넣거나 입력하세요."
-          className="w-full bg-slate-950 border border-slate-700 rounded-md px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-indigo-400 resize-y"
-        />
+        <div className="px-5 pb-6 space-y-3">
+          {/* Main textarea */}
+          <textarea
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            rows={6}
+            placeholder="어떤 글이 마음에 들었나요?"
+            className="w-full bg-zinc-950 border border-zinc-700/60 rounded-2xl px-4 py-3 text-sm text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-pink-500/50 focus:ring-1 focus:ring-pink-500/20 resize-none transition-colors"
+          />
 
-        <label className="block text-xs text-slate-400 mb-1 mt-3">출처 URL (선택)</label>
-        <input
-          type="url"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          placeholder="https://..."
-          className="w-full bg-slate-950 border border-slate-700 rounded-md px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-indigo-400"
-        />
-
-        <label className="block text-xs text-slate-400 mb-1 mt-3">태그 (쉼표로 구분, 선택)</label>
-        <input
-          value={tagsRaw}
-          onChange={(e) => setTagsRaw(e.target.value)}
-          placeholder="stoic, 글쓰기"
-          className="w-full bg-slate-950 border border-slate-700 rounded-md px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-indigo-400"
-        />
-
-        <div className="flex justify-end gap-2 mt-5">
+          {/* Extra fields toggle */}
           <button
-            onClick={onClose}
-            className="px-4 py-2 text-sm text-slate-300 hover:text-slate-100"
-            disabled={saving}
+            type="button"
+            onClick={() => setShowExtra((v) => !v)}
+            className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
           >
-            취소
+            <svg
+              viewBox="0 0 24 24"
+              className={`w-3.5 h-3.5 transition-transform ${showExtra ? 'rotate-180' : ''}`}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+            {showExtra ? '출처 · 태그 접기' : '출처 URL · 태그 추가 (선택)'}
           </button>
+
+          {showExtra && (
+            <div className="space-y-2">
+              <input
+                type="url"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                placeholder="출처 URL (https://...)"
+                className="w-full bg-zinc-950 border border-zinc-700/60 rounded-xl px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-pink-500/50 focus:ring-1 focus:ring-pink-500/20 transition-colors"
+              />
+              <input
+                value={tagsRaw}
+                onChange={(e) => setTagsRaw(e.target.value)}
+                placeholder="태그 (쉼표로 구분: stoic, 글쓰기)"
+                className="w-full bg-zinc-950 border border-zinc-700/60 rounded-xl px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-pink-500/50 focus:ring-1 focus:ring-pink-500/20 transition-colors"
+              />
+            </div>
+          )}
+
+          {/* Save button */}
           <button
             onClick={onSave}
             disabled={saving}
-            className="px-4 py-2 bg-indigo-500 hover:bg-indigo-400 disabled:bg-slate-700 text-white text-sm rounded-md"
+            className="w-full py-3 rounded-full bg-wordrobe-gradient text-white font-semibold text-sm shadow-glow-sm disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
           >
-            {saving ? '저장 중...' : '저장'}
+            {saving ? '저장 중...' : '저장하기'}
           </button>
         </div>
       </div>

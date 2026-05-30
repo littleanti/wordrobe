@@ -12,8 +12,7 @@ export default function ApiKeyStatus() {
   if (!settings.apiKey) return null;
 
   return (
-    <div className="flex items-center gap-2 text-xs text-slate-400">
-      <span className="hidden sm:inline">키:</span>
+    <div className="flex items-center gap-2 text-xs text-zinc-400">
       {editing ? (
         <>
           <input
@@ -21,8 +20,17 @@ export default function ApiKeyStatus() {
             autoFocus
             value={next}
             onChange={(e) => setNext(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && next.trim()) {
+                setSettings({ apiKey: next.trim() });
+                pushToast('API 키를 갱신했습니다.', 'success');
+                setEditing(false);
+                setNext('');
+              }
+              if (e.key === 'Escape') setEditing(false);
+            }}
             placeholder="새 API 키"
-            className="bg-slate-950 border border-slate-700 rounded px-2 py-1 text-xs w-40"
+            className="bg-zinc-950 border border-zinc-700/60 rounded-xl px-3 py-1.5 text-xs w-36 focus:outline-none focus:border-pink-500/60 transition-colors"
           />
           <button
             onClick={() => {
@@ -32,21 +40,22 @@ export default function ApiKeyStatus() {
               setEditing(false);
               setNext('');
             }}
-            className="text-indigo-300 hover:text-indigo-200"
+            className="text-pink-400 hover:text-pink-300 font-medium transition-colors"
           >
             저장
           </button>
-          <button onClick={() => setEditing(false)} className="text-slate-500 hover:text-slate-300">
+          <button onClick={() => setEditing(false)} className="text-zinc-600 hover:text-zinc-400 transition-colors">
             취소
           </button>
         </>
       ) : (
-        <>
-          <code className="text-slate-300">{settingsRepo.maskKey(settings.apiKey)}</code>
-          <button onClick={() => setEditing(true)} className="text-slate-500 hover:text-slate-300 underline">
-            변경
-          </button>
-        </>
+        <button
+          onClick={() => setEditing(true)}
+          className="flex items-center gap-1.5 hover:text-zinc-200 transition-colors group"
+        >
+          <span className="w-2 h-2 rounded-full bg-wordrobe-gradient shadow-glow-sm flex-shrink-0" />
+          <code className="text-zinc-400 group-hover:text-zinc-200 transition-colors">{settingsRepo.maskKey(settings.apiKey)}</code>
+        </button>
       )}
     </div>
   );
