@@ -1,11 +1,11 @@
 import { GeminiClient } from './gemini';
 import {
-  PERSONA_ANALYSIS_SCHEMA,
   buildPersonaAnalysisUserPrompt,
   renderPersonaMarkdown,
 } from './prompts';
 import { personaRepo } from './repos/personaRepo';
 import { phraseRepo } from './repos/phraseRepo';
+import { tStatic } from './i18n';
 import type { PersonaAnalysisJson, PersonaMemory, Settings } from './types';
 
 export interface AnalyzeResult {
@@ -19,16 +19,16 @@ export async function analyzeAndUpdatePersona(settings: Settings): Promise<Analy
   if (phrases.length < settings.minPhrasesForAnalysis) {
     return {
       status: 'skipped',
-      reason: `글귀가 ${settings.minPhrasesForAnalysis}개 미만 (${phrases.length}개)`,
+      reason: tStatic('persona.skipTooFew', { min: settings.minPhrasesForAnalysis, n: phrases.length }),
     };
   }
   if (!settings.apiKey) {
-    return { status: 'skipped', reason: 'API 키 미설정' };
+    return { status: 'skipped', reason: tStatic('persona.skipNoKey') };
   }
 
-  const client = new GeminiClient({ apiKey: settings.apiKey, model: settings.model });
+  const client = new GeminiClient({ apiKey: settings.apiKey });
   const prompt = buildPersonaAnalysisUserPrompt(phrases);
-  const analysis = await client.generateJson<PersonaAnalysisJson>(prompt, PERSONA_ANALYSIS_SCHEMA);
+  const analysis = await client.generateJson<PersonaAnalysisJson>(prompt);
 
   const previous = await personaRepo.getLatest();
   const memory: PersonaMemory = {

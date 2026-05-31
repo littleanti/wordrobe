@@ -187,9 +187,9 @@ P2 (M1 끝에 시간 남으면)
 
 PRD/TRD에서 보류된 사항을 M0~M1 사이에 정리한다.
 
-- [ ] **이름 확정**: Wordrobe / Eloq / Phrasr / Tonemate / Mellow 중 택1
-- [ ] **Android 패키징**: Capacitor (권장) vs TWA
-- [ ] **익스텐션 저장소 전략**: iframe-bridge vs chrome.storage 단독
+- [x] **이름 확정**: Wordrobe / Eloq / Phrasr / Tonemate / Mellow 중 택1
+- [x] **Android 패키징**: Capacitor (권장) vs TWA
+- [x] **익스텐션 저장소 전략**: iframe-bridge vs chrome.storage 단독
 - [ ] **유료 모델 도입 여부**: v1은 무료 가정. 향후 자체 키 옵션을 유료 토대로 검토.
 - [ ] **자체 LLM 프록시 도입 시점**: 사용자가 "내 키 등록이 부담" 피드백 다수면 검토.
 

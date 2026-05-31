@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { NavLink, Navigate, Route, Routes } from 'react-router-dom';
 import PhrasesPage from './routes/PhrasesPage';
 import PersonaPage from './routes/PersonaPage';
@@ -5,12 +6,14 @@ import ComposePage from './routes/ComposePage';
 import OnboardingModal from './components/OnboardingModal';
 import ToastContainer from './components/Toast';
 import ApiKeyStatus from './components/ApiKeyStatus';
+import LanguageToggle from './components/LanguageToggle';
 import { useApp } from './lib/store';
+import { useT } from './lib/i18n';
 
 const tabs = [
   {
     to: '/phrases',
-    label: '글귀',
+    labelKey: 'nav.phrases',
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
@@ -20,7 +23,7 @@ const tabs = [
   },
   {
     to: '/persona',
-    label: '페르소나',
+    labelKey: 'nav.persona',
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -30,7 +33,7 @@ const tabs = [
   },
   {
     to: '/compose',
-    label: '변환',
+    labelKey: 'nav.compose',
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
         <line x1="22" y1="2" x2="11" y2="13" />
@@ -42,17 +45,23 @@ const tabs = [
 
 export default function App() {
   const hasKey = useApp((s) => s.settings.apiKey.length > 0);
+  const t = useT();
+
+  useEffect(() => {
+    document.title = t('app.docTitle');
+  }, [t]);
 
   return (
-    <div className="min-h-dvh flex flex-col bg-zinc-950">
-      <header className="px-5 py-3 flex items-center justify-between gap-4 shadow-sm bg-zinc-950/80 backdrop-blur-md sticky top-0 z-30 border-b border-zinc-800/60">
+    <div className="min-h-dvh flex flex-col bg-slate-50">
+      <header className="px-5 py-3 flex items-center justify-between gap-4 bg-white/80 backdrop-blur-md sticky top-0 z-30 border-b border-slate-200">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-wordrobe-gradient flex items-center justify-center shadow-glow-sm">
-            <span className="text-white font-bold text-sm leading-none">W</span>
-          </div>
-          <span className="font-semibold tracking-tight text-zinc-100">Wordrobe</span>
+          <img src="/logo.png" alt="" className="h-8 w-8 object-contain" />
+          <span className="font-semibold tracking-tight text-slate-900">Wordrobe</span>
         </div>
-        <ApiKeyStatus />
+        <div className="flex items-center gap-3">
+          <ApiKeyStatus />
+          <LanguageToggle />
+        </div>
       </header>
 
       <main className="flex-1 pb-20">
@@ -64,28 +73,24 @@ export default function App() {
         </Routes>
       </main>
 
-      <nav className="fixed bottom-0 inset-x-0 z-30 bg-zinc-950/90 backdrop-blur-md border-t border-zinc-800/60">
+      <nav className="fixed bottom-0 inset-x-0 z-30 bg-white/90 backdrop-blur-md border-t border-slate-200 shadow-[0_-4px_20px_rgba(0,0,0,.06)]">
         <div className="flex items-stretch max-w-lg mx-auto">
-          {tabs.map((t) => (
+          {tabs.map((tab) => (
             <NavLink
-              key={t.to}
-              to={t.to}
+              key={tab.to}
+              to={tab.to}
               className={({ isActive }) =>
-                `flex-1 flex flex-col items-center justify-center gap-1 py-3 text-xs font-medium transition-colors ${
-                  isActive
-                    ? 'text-transparent bg-clip-text bg-wordrobe-gradient'
-                    : 'text-zinc-500 hover:text-zinc-300'
+                `flex-1 flex flex-col items-center justify-center gap-1 py-3 text-xs font-medium transition-all ${
+                  isActive ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600'
                 }`
               }
             >
               {({ isActive }) => (
                 <>
-                  <span className={isActive ? '[&>svg]:stroke-pink-500' : ''}>
-                    {t.icon}
+                  <span className={isActive ? 'scale-110 transition-transform' : 'transition-transform'}>
+                    {tab.icon}
                   </span>
-                  <span className={isActive ? 'bg-wordrobe-gradient bg-clip-text text-transparent' : ''}>
-                    {t.label}
-                  </span>
+                  <span>{t(tab.labelKey)}</span>
                 </>
               )}
             </NavLink>

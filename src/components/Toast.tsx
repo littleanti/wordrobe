@@ -9,15 +9,15 @@ export default function ToastContainer() {
         <button
           key={t.id}
           onClick={() => dismiss(t.id)}
-          className="flex items-center gap-2.5 px-4 py-2.5 rounded-full shadow-lg text-sm text-left transition-all bg-zinc-900/80 backdrop-blur-md border border-zinc-800/60 text-zinc-100"
+          className="flex items-center gap-2.5 px-4 py-2.5 rounded-full shadow-soft-lg text-sm text-left transition-all bg-slate-800 text-white"
         >
           <span
             className={`w-2 h-2 rounded-full flex-shrink-0 ${
               t.tone === 'error'
-                ? 'bg-rose-500'
+                ? 'bg-red-400'
                 : t.tone === 'success'
                   ? 'bg-emerald-400'
-                  : 'bg-zinc-400'
+                  : 'bg-slate-400'
             }`}
           />
           {t.message}

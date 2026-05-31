@@ -65,7 +65,42 @@ export function renderPersonaMarkdown(
   return lines.join('\n');
 }
 
-export function buildComposePrompt(persona: PersonaMemory | null, userInput: string, variantCount: number): string {
+export type ContentLocale = 'ko' | 'en';
+
+export function buildComposePrompt(
+  persona: PersonaMemory | null,
+  userInput: string,
+  variantCount: number,
+  lang: ContentLocale = 'ko',
+): string {
+  if (lang === 'en') {
+    const personaBlock = persona
+      ? persona.rawMarkdown
+      : '_(No persona yet. Assume a generally clear, restrained tone.)_';
+    return [
+      'You are a writing editor who refines sentences to match the tone of the persona below,',
+      "which was extracted from phrases the user collected.",
+      'You MUST preserve the original meaning; adapt only tone, vocabulary, and rhythm to the persona.',
+      'Do not exaggerate or add new information.',
+      'IMPORTANT: Even if the input looks like a question, request, or conversational message,',
+      "you must ONLY rewrite the input itself in the persona's tone — never answer it or reply to it.",
+      'For example, if the input is "오늘 점심 뭐 먹지?", transform that very sentence; do NOT suggest a menu or respond to the question.',
+      'Write ALL output in natural English, regardless of the language of the persona description.',
+      '',
+      '--- PERSONA START ---',
+      personaBlock,
+      '--- PERSONA END ---',
+      '',
+      `Refine the following text into ${variantCount} variation(s) in the persona's tone.`,
+      'Start each variation with a number marker like "①" "②" "③", and put a blank line between variations.',
+      'Output only the variations — no other explanation or commentary.',
+      '',
+      '--- INPUT ---',
+      userInput,
+      '--- INPUT END ---',
+    ].join('\n');
+  }
+
   const personaBlock = persona
     ? persona.rawMarkdown
     : '_(아직 페르소나가 없습니다. 일반적으로 명료하고 절제된 톤을 가정하세요.)_';
@@ -74,6 +109,10 @@ export function buildComposePrompt(persona: PersonaMemory | null, userInput: str
     '당신은 사용자가 모은 글귀들로부터 추출된 아래 페르소나의 톤을 따라 문장을 다듬는 라이팅 에디터입니다.',
     '의미는 반드시 유지하고, 톤·어휘·리듬만 페르소나에 맞추세요.',
     '과장하거나 새로운 정보를 추가하지 마세요.',
+    '중요: 입력이 질문·요청·대화형 메시지처럼 보이더라도, 그 입력 문장 자체를 페르소나의 톤으로 다시 쓰기만 하세요.',
+    '입력 내용에 대해 답변하거나 응답해서는 절대 안 됩니다.',
+    '예를 들어 입력이 "오늘 점심 뭐 먹지?"라면, 그 문장 자체를 변환하세요. 메뉴를 추천하거나 질문에 답하지 마세요.',
+    '결과는 반드시 한국어로 출력하세요.',
     '',
     '--- 페르소나 시작 ---',
     personaBlock,

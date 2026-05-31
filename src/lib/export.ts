@@ -1,5 +1,6 @@
 import { personaRepo } from './repos/personaRepo';
 import { phraseRepo } from './repos/phraseRepo';
+import { tStatic } from './i18n';
 import type { ExportPayload, Phrase, PersonaMemory } from './types';
 
 export async function exportAll(): Promise<ExportPayload> {
@@ -14,7 +15,7 @@ export async function exportAll(): Promise<ExportPayload> {
 
 export async function importAll(payload: ExportPayload, opts: { replace: boolean }): Promise<void> {
   if (payload.schema !== 'wordrobe-v1') {
-    throw new Error(`지원하지 않는 스키마: ${payload.schema}`);
+    throw new Error(tStatic('error.unsupportedSchema', { schema: payload.schema }));
   }
   if (opts.replace) {
     await phraseRepo.clear();

@@ -12,13 +12,13 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg'],
+      includeAssets: ['favicon.png', 'apple-touch-icon.png', 'logo.png', 'icon-192.png', 'icon-512.png'],
       manifest: {
         name: 'Wordrobe',
         short_name: 'Wordrobe',
         description: '내가 닮고 싶은 말의 옷장',
-        theme_color: '#0f172a',
-        background_color: '#0f172a',
+        theme_color: '#6366f1',
+        background_color: '#f8fafc',
         display: 'standalone',
         start_url: '/',
         icons: [
@@ -37,5 +37,5 @@ export default defineConfig({
       },
     }),
   ],
-  server: { host: '127.0.0.1', port: 5560, strictPort: true },
+  server: { host: '0.0.0.0', port: 4122, strictPort: true },
 });

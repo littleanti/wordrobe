@@ -3,12 +3,13 @@ import { personaRepo } from '../lib/repos/personaRepo';
 import { GeminiClient } from '../lib/gemini';
 import { buildComposePrompt, parseComposeVariants } from '../lib/prompts';
 import { useApp } from '../lib/store';
-import type { GeminiModel, PersonaMemory } from '../lib/types';
+import { useT, resolveContentLocale } from '../lib/i18n';
+import type { PersonaMemory } from '../lib/types';
 
 export default function ComposePage() {
   const settings = useApp((s) => s.settings);
-  const setSettings = useApp((s) => s.setSettings);
   const pushToast = useApp((s) => s.pushToast);
+  const t = useT();
 
   const [input, setInput] = useState('');
   const [variantCount, setVariantCount] = useState(2);
@@ -26,15 +27,15 @@ export default function ComposePage() {
   const onCompose = async () => {
     const trimmed = input.trim();
     if (!trimmed) {
-      pushToast('변환할 문장을 입력하세요.', 'error');
+      pushToast(t('compose.enterText'), 'error');
       return;
     }
     setSubmittedInput(trimmed);
     setRawOutput('');
     setStreaming(true);
     try {
-      const client = new GeminiClient({ apiKey: settings.apiKey, model: settings.model });
-      const prompt = buildComposePrompt(persona, trimmed, variantCount);
+      const client = new GeminiClient({ apiKey: settings.apiKey });
+      const prompt = buildComposePrompt(persona, trimmed, variantCount, resolveContentLocale(settings));
       let acc = '';
       for await (const chunk of client.stream(prompt)) {
         acc += chunk;
@@ -50,9 +51,9 @@ export default function ComposePage() {
   const onCopy = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      pushToast('클립보드에 복사했습니다.', 'success');
+      pushToast(t('compose.copiedToast'), 'success');
     } catch {
-      pushToast('복사에 실패했습니다.', 'error');
+      pushToast(t('compose.copyFailed'), 'error');
     }
   };
 
@@ -62,22 +63,22 @@ export default function ComposePage() {
     <section className="max-w-2xl mx-auto px-4 py-6 space-y-4">
       {/* No persona notice */}
       {!persona && (
-        <div className="rounded-2xl px-4 py-3 bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20">
-          <p className="text-xs text-amber-400/90">
-            페르소나가 아직 없습니다. 결과는 일반 톤으로 나옵니다.{' '}
-            <span className="text-amber-300">글귀 탭에서 글귀를 모은 뒤 페르소나 탭에서 분석해보세요.</span>
+        <div className="rounded-2xl px-4 py-3 bg-amber-50 border border-amber-200">
+          <p className="text-xs text-amber-700">
+            {t('compose.noPersona1')}{' '}
+            <span className="text-amber-600 font-medium">{t('compose.noPersona2')}</span>
           </p>
         </div>
       )}
 
       {/* Input area */}
-      <div className="rounded-2xl bg-zinc-900/60 border border-zinc-800/60 overflow-hidden">
+      <div className="rounded-2xl bg-white border border-slate-200 overflow-hidden shadow-soft-sm">
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
           rows={5}
-          placeholder="자유롭게 쓰세요…"
-          className="w-full bg-transparent px-5 pt-4 pb-2 text-sm text-zinc-100 placeholder:text-zinc-600 focus:outline-none resize-none leading-relaxed"
+          placeholder={t('compose.inputPlaceholder')}
+          className="w-full bg-transparent px-5 pt-4 pb-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none resize-none leading-relaxed"
           onKeyDown={(e) => {
             if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) onCompose();
           }}
@@ -85,24 +86,13 @@ export default function ComposePage() {
 
         {/* Controls row */}
         <div className="px-4 pb-3 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3 text-xs text-zinc-500">
+          <div className="flex items-center gap-3 text-xs text-slate-400">
             <label className="flex items-center gap-1.5">
-              모델
-              <select
-                value={settings.model}
-                onChange={(e) => setSettings({ model: e.target.value as GeminiModel })}
-                className="bg-zinc-800 border border-zinc-700/60 rounded-lg px-2 py-1 text-xs text-zinc-300 focus:outline-none"
-              >
-                <option value="gemini-2.5-flash">Flash</option>
-                <option value="gemini-2.5-pro">Pro</option>
-              </select>
-            </label>
-            <label className="flex items-center gap-1.5">
-              안 수
+              {t('compose.count')}
               <select
                 value={variantCount}
                 onChange={(e) => setVariantCount(Number(e.target.value))}
-                className="bg-zinc-800 border border-zinc-700/60 rounded-lg px-2 py-1 text-xs text-zinc-300 focus:outline-none"
+                className="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-xs text-slate-700 focus:outline-none focus:border-indigo-500"
               >
                 <option value={1}>1</option>
                 <option value={2}>2</option>
@@ -114,9 +104,9 @@ export default function ComposePage() {
           <button
             onClick={onCompose}
             disabled={streaming || !settings.apiKey}
-            className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-wordrobe-gradient shadow-glow-sm disabled:opacity-40 disabled:shadow-none transition-opacity hover:opacity-90 active:opacity-80"
+            className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-wordrobe-gradient shadow-glow-sm disabled:opacity-40 disabled:shadow-none transition-all hover:opacity-90 active:scale-[.98]"
           >
-            {streaming ? '변환 중…' : '✨ 멋지게'}
+            {streaming ? t('compose.transforming') : t('compose.submit')}
           </button>
         </div>
       </div>
@@ -127,8 +117,8 @@ export default function ComposePage() {
           {/* User bubble (original input) */}
           {submittedInput && (
             <div className="flex justify-end">
-              <div className="max-w-[80%] rounded-2xl rounded-tr-sm bg-zinc-800/80 px-4 py-3">
-                <p className="text-sm text-zinc-400 leading-relaxed whitespace-pre-wrap">{submittedInput}</p>
+              <div className="max-w-[80%] rounded-2xl rounded-tr-sm bg-slate-100 px-4 py-3">
+                <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-wrap">{submittedInput}</p>
               </div>
             </div>
           )}
@@ -136,11 +126,11 @@ export default function ComposePage() {
           {/* Streaming waiting state */}
           {streaming && variants.length === 0 && (
             <div className="flex justify-start">
-              <div className="rounded-2xl rounded-tl-sm border border-zinc-700/60 px-4 py-3 bg-zinc-900/60">
+              <div className="rounded-2xl rounded-tl-sm border border-slate-200 px-4 py-3 bg-white shadow-soft-sm">
                 <div className="flex gap-1 items-center">
-                  <span className="w-1.5 h-1.5 rounded-full bg-pink-500 animate-pulse" />
-                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse [animation-delay:150ms]" />
-                  <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse [animation-delay:300ms]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse [animation-delay:150ms]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-pulse [animation-delay:300ms]" />
                 </div>
               </div>
             </div>
@@ -154,23 +144,23 @@ export default function ComposePage() {
               <div key={v.index} className="flex justify-start">
                 <div className={`max-w-[85%] relative rounded-2xl rounded-tl-sm overflow-hidden ${isPulsing ? 'animate-pulse' : ''}`}>
                   {/* Gradient border */}
-                  <div className="absolute inset-0 bg-wordrobe-gradient opacity-30 rounded-2xl rounded-tl-sm" />
-                  <div className="relative bg-zinc-900/90 m-[1px] rounded-2xl rounded-tl-sm px-4 py-3">
+                  <div className="absolute inset-0 bg-wordrobe-gradient opacity-40 rounded-2xl rounded-tl-sm" />
+                  <div className="relative bg-white m-[1.5px] rounded-2xl rounded-tl-sm px-4 py-3">
                     {/* Index chip */}
-                    <span className="inline-block text-xs font-bold bg-clip-text text-transparent bg-wordrobe-gradient mb-2">
+                    <span className="inline-block text-xs font-bold text-indigo-600 mb-2">
                       {indexChips[v.index - 1] ?? v.index}
                     </span>
-                    <p className="text-sm text-zinc-100 leading-relaxed whitespace-pre-wrap">{v.text}</p>
+                    <p className="text-sm text-slate-900 leading-relaxed whitespace-pre-wrap">{v.text}</p>
                     <div className="flex justify-end mt-2">
                       <button
                         onClick={() => onCopy(v.text)}
-                        className="text-xs text-zinc-600 hover:text-zinc-400 transition-colors flex items-center gap-1"
+                        className="text-xs text-slate-400 hover:text-indigo-600 transition-colors flex items-center gap-1"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3 h-3">
                           <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
                           <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                         </svg>
-                        복사
+                        {t('common.copy')}
                       </button>
                     </div>
                   </div>
@@ -182,8 +172,8 @@ export default function ComposePage() {
           {/* Fallback raw output */}
           {!streaming && rawOutput && variants.length === 0 && (
             <div className="flex justify-start">
-              <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-zinc-900/60 border border-zinc-800/60 px-4 py-3">
-                <pre className="text-sm text-zinc-200 whitespace-pre-wrap leading-relaxed">{rawOutput}</pre>
+              <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-white border border-slate-200 px-4 py-3 shadow-soft-sm">
+                <pre className="text-sm text-slate-700 whitespace-pre-wrap leading-relaxed">{rawOutput}</pre>
               </div>
             </div>
           )}

@@ -19,12 +19,13 @@ export interface PersonaMemory {
   sourcePhraseIds: string[];
 }
 
-export type GeminiModel = 'gemini-2.5-flash' | 'gemini-2.5-pro';
+/** Single model used for every LLM call (compose + persona analysis). */
+export const MODEL_ID = 'gemma-4-31b-it';
+
 export type Locale = 'ko' | 'en' | 'auto';
 
 export interface Settings {
   apiKey: string;
-  model: GeminiModel;
   language: Locale;
   uiLocale: 'ko' | 'en';
   autoAnalyze: boolean;
@@ -33,7 +34,6 @@ export interface Settings {
 
 export const DEFAULT_SETTINGS: Settings = {
   apiKey: '',
-  model: 'gemini-2.5-flash',
   language: 'auto',
   uiLocale: 'ko',
   autoAnalyze: true,

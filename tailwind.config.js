@@ -4,21 +4,23 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'Noto Sans KR', 'system-ui', 'sans-serif'],
       },
       backgroundImage: {
-        'wordrobe-gradient': 'linear-gradient(to top right, #ec4899, #f43f5e, #fb923c)',
-        'wordrobe-gradient-subtle': 'linear-gradient(to top right, #ec489920, #f43f5e20, #fb923c20)',
-        'wordrobe-gradient-mesh': 'radial-gradient(ellipse at 20% 50%, #ec489918 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, #a855f718 0%, transparent 50%), radial-gradient(ellipse at 60% 80%, #fb923c18 0%, transparent 50%)',
+        // Indigo brand gradient (matches persona-mirror --primary → --primary-dark)
+        'wordrobe-gradient': 'linear-gradient(135deg, #6366f1, #4f46e5)',
+        'wordrobe-gradient-subtle': 'linear-gradient(135deg, #eef2ff, #e0e7ff)',
+        // Avatar gradient (persona-mirror --primary-light → --primary)
+        'avatar-gradient': 'linear-gradient(135deg, #818cf8, #6366f1)',
       },
       boxShadow: {
-        'glow': '0 0 20px 2px rgba(236, 72, 153, 0.25)',
-        'glow-sm': '0 0 10px 1px rgba(236, 72, 153, 0.15)',
-      },
-      colors: {
-        zinc: {
-          950: '#09090b',
-        },
+        // Neutral soft shadows (persona-mirror --shadow-sm / --shadow / --shadow-lg)
+        'soft-sm': '0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04)',
+        'soft': '0 4px 12px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.04)',
+        'soft-lg': '0 10px 25px rgba(0,0,0,.1), 0 4px 10px rgba(0,0,0,.06)',
+        // Indigo glow for FAB / brand accents
+        'glow': '0 4px 16px rgba(99,102,241,.4)',
+        'glow-sm': '0 2px 8px rgba(99,102,241,.3)',
       },
       keyframes: {
         'slide-up': {
