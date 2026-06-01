@@ -72,17 +72,6 @@ export default function OnboardingModal() {
           {t('onboarding.getKey')}
         </a>
 
-        <div className="mb-6 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3">
-          <p className="text-xs font-semibold text-slate-600 mb-2">{t('onboarding.guideTitle')}</p>
-          <ul className="space-y-1.5 text-xs text-slate-500 leading-relaxed list-disc list-inside">
-            <li>{t('onboarding.guideStorage')}</li>
-            <li>{t('onboarding.guideTransmit')}</li>
-            <li>{t('onboarding.guideKeyRestrict')}</li>
-            <li>{t('onboarding.guideQuota')}</li>
-            <li>{t('onboarding.guideDataLoss')}</li>
-          </ul>
-        </div>
-
         <label className="flex items-start gap-3 mb-6 text-xs text-slate-500 cursor-pointer">
           <input
             type="checkbox"
