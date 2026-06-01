@@ -2,7 +2,7 @@
 
 > PRD.md의 기능을 만족하기 위한 기술적 결정과 그 근거.
 > 작성일: 2026-05-29 · 버전: 0.2
-> 갱신: 2026-06-01 — 실제 출시 구현 반영 (GitHub Pages 배포, 단일 모델 `gemma-4-31b-it`, `@google/genai` 2.7.0 + lazy 코드 스플릿, index.html meta CSP, 폰트 self-hosting).
+> 갱신: 2026-06-01 — 실제 출시 구현 반영 (GitHub Pages 배포, 단일 모델 `gemini-3.1-flash-lite`, `@google/genai` 2.7.0 + lazy 코드 스플릿, index.html meta CSP, 폰트 self-hosting).
 
 ---
 
@@ -234,9 +234,9 @@ Task:
 스트리밍 응답(SSE) 사용, 첫 토큰 도착 시 즉시 표시.
 
 ### 7.4 모델 (단일 모델로 통일)
-- **모든 LLM 호출(변환 스트리밍 + 페르소나 분석)을 단일 모델 `gemma-4-31b-it`로 처리.** 모델 선택 UI 없음.
+- **모든 LLM 호출(변환 스트리밍 + 페르소나 분석)을 단일 모델 `gemini-3.1-flash-lite`로 처리.** 모델 선택 UI 없음.
 - 모델 ID는 `src/lib/types.ts`의 `MODEL_ID` 한 곳에서만 관리.
-- Gemma 계열은 구조화 출력(`responseSchema`)을 지원하지 않으므로, 페르소나 분석은 **프롬프트 기반 JSON 지시 + 코드펜스 제거 파싱**(`gemini.ts`의 `extractJson`)으로 처리.
+- 페르소나 분석은 `responseSchema` 대신 **프롬프트 기반 JSON 지시 + 코드펜스 제거 파싱**(`gemini.ts`의 `extractJson`)으로 처리 — 모델 교체에 견고한 방식.
 
 ---
 
@@ -315,7 +315,7 @@ Task:
 | D-02 | 익스텐션 ↔ 웹앱 저장소 → **iframe-bridge** | ✅ 확정 2026-05-29. IndexedDB 단일 소스. |
 | D-03 | 페르소나 분석 빈도 기본값 | ✅ 자동 분석 on, 최소 글귀 5개(`minPhrasesForAnalysis`). |
 | D-04 | 호스팅 → **GitHub Pages** (`littleanti.github.io/wordrobe`) | ✅ 확정 2026-06-01. 기존 Cloudflare Pages/`wordrobe.app` 안 대체. Vite base `/wordrobe/` + GitHub Actions 배포. |
-| D-05 | LLM 모델 → **단일 `gemma-4-31b-it`** | ✅ 확정. 모델 선택 UI 제거, `MODEL_ID` 단일 관리. |
+| D-05 | LLM 모델 → **단일 `gemini-3.1-flash-lite`** | ✅ 확정. 모델 선택 UI 제거, `MODEL_ID` 단일 관리. |
 | D-06 | LLM SDK → **`@google/genai` 2.x + lazy 스플릿** | ✅ 확정 2026-06-01. 0.3.1 취약점 해소 + 초기 번들 절감. |
 
 ---

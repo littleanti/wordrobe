@@ -20,7 +20,7 @@ export interface PersonaMemory {
 }
 
 /** Single model used for every LLM call (compose + persona analysis). */
-export const MODEL_ID = 'gemma-4-31b-it';
+export const MODEL_ID = 'gemini-3.1-flash-lite';
 
 export type Locale = 'ko' | 'en' | 'auto';
 

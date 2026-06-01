@@ -38,7 +38,7 @@ export interface GeminiClientOptions {
 
 /**
  * Extract a JSON object/array from a model response.
- * Gemma models don't support structured-output (`responseSchema`), so the
+ * We instruct JSON-only via the prompt instead of using `responseSchema`, so the
  * response may be wrapped in a ```json code fence or include stray prose.
  */
 function extractJson(raw: string): string {
@@ -63,7 +63,7 @@ export class GeminiClient {
 
   async generateJson<T>(prompt: string): Promise<T> {
     try {
-      // Gemma does not support responseSchema; instruct JSON-only via the prompt.
+      // Instruct JSON-only via the prompt (no responseSchema) for portability.
       const result = await this.ai.models.generateContent({
         model: MODEL_ID,
         contents: `${prompt}\n\n반드시 유효한 JSON 객체 하나만 출력하세요. 코드블록 표시나 다른 설명은 절대 포함하지 마세요.`,

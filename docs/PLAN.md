@@ -71,7 +71,7 @@
 
 **[D] 페르소나 엔진**
 - [x] 분석 프롬프트 v1 (`src/lib/prompts.ts`)
-- [x] JSON 출력 → PERSONA.md 렌더러 (Gemma는 `responseSchema` 미지원 → 프롬프트 JSON 지시 + `extractJson` 파싱)
+- [x] JSON 출력 → PERSONA.md 렌더러 (`responseSchema` 대신 프롬프트 JSON 지시 + `extractJson` 파싱 — 모델 교체에 견고)
 - [x] 디바운스 (30초, `scheduleAutoAnalyze`)
 - [x] 수동 트리거 버튼 (페르소나 페이지)
 - [ ] 증분 캐시 (현재는 전체 분석 — 비용 체감 후 결정, D-03)

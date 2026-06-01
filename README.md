@@ -20,7 +20,7 @@ npm run dev      # http://localhost:5173
 
 - 정적 PWA. 서버 없음.
 - 모든 LLM 호출은 브라우저 → Google AI Studio 직통.
-- **단일 모델 `gemma-4-31b-it`** 로 모든 LLM 콜(글 다듬기 스트리밍 + 페르소나 분석)을 처리. 모델 선택 UI 없음. 모델 ID는 `src/lib/types.ts`의 `MODEL_ID` 한 곳에서 관리.
-  - Gemma 계열은 구조화 출력(`responseSchema`)을 지원하지 않으므로, 페르소나 분석은 프롬프트 기반 JSON 지시 + 코드펜스 제거 파싱(`gemini.ts`의 `extractJson`)으로 처리.
+- **단일 모델 `gemini-3.1-flash-lite`** 로 모든 LLM 콜(글 다듬기 스트리밍 + 페르소나 분석)을 처리. 모델 선택 UI 없음. 모델 ID는 `src/lib/types.ts`의 `MODEL_ID` 한 곳에서 관리.
+  - 페르소나 분석은 `responseSchema` 대신 프롬프트 기반 JSON 지시 + 코드펜스 제거 파싱(`gemini.ts`의 `extractJson`)으로 처리 (모델 교체에 견고).
 - 사용자 API 키는 `localStorage`에만 저장 — 외부로 전송되지 않음.
 - 글귀·페르소나는 IndexedDB(Dexie) 로컬 저장.

@@ -2,7 +2,7 @@
 
 > 정식 명칭: **Wordrobe** (확정 2026-05-29).
 > 작성일: 2026-05-29 · 버전: 0.2
-> 갱신: 2026-06-01 — M1 MVP가 **GitHub Pages 베타**로 출시됨 (`https://littleanti.github.io/wordrobe/`). LLM은 단일 모델 `gemma-4-31b-it`로 통일, 온보딩에 BYOK 보안/프라이버시 풀 가이드 적용.
+> 갱신: 2026-06-01 — M1 MVP가 **GitHub Pages 베타**로 출시됨 (`https://littleanti.github.io/wordrobe/`). LLM은 단일 모델 `gemini-3.1-flash-lite`로 통일, 온보딩에 BYOK 보안/프라이버시 풀 가이드 적용.
 
 ---
 
