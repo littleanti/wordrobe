@@ -1,7 +1,8 @@
 # PLAN — Wordrobe 구현 계획
 
 > PRD.md · TRD.md를 실행 가능한 단위로 분해한 로드맵.
-> 작성일: 2026-05-29 · 버전: 0.1 (초안)
+> 작성일: 2026-05-29 · 버전: 0.2
+> 갱신: 2026-06-01 — M1 PWA MVP 완료 후 **GitHub Pages 베타 출시**(`littleanti.github.io/wordrobe`). 호스팅 Cloudflare → GitHub Pages 전환, 단일 모델/SDK 2.x 반영.
 
 ---
 
@@ -18,7 +19,7 @@
 | M | 목표 | 산출물 | 예상 소요 |
 |---|---|---|---|
 | M0 | 기초 결정 / 디자인 골격 | 와이어프레임, 도메인 확보, 리포 부트스트랩 | 3~5일 |
-| M1 | **PWA MVP** (변환까지 작동) | wordrobe.app 베타 1 | 2~3주 |
+| M1 | **PWA MVP** (변환까지 작동) | GitHub Pages 베타 1 (`littleanti.github.io/wordrobe`) ✅ | 2~3주 |
 | M2 | 크롬 익스텐션 | Chrome Web Store 비공개 베타 | 1~1.5주 |
 | M3 | 모바일 래핑 (iOS/Android) | TestFlight + Internal Track | 2~3주 |
 | M4 | 베타 → 정식 출시 | 스토어 심사 통과 + 랜딩 페이지 | 1~2주 |
@@ -30,20 +31,20 @@
 
 ### 작업
 - [x] **앱 이름 확정**: Wordrobe (2026-05-29)
-- [ ] 도메인 가용성 확인 (`wordrobe.app` 1순위) — **사용자 작업**
+- [x] **호스팅 확정**: GitHub Pages 프로젝트 사이트 (`littleanti.github.io/wordrobe`). `wordrobe.app` 커스텀 도메인은 향후 옵션.
 - [ ] **로고 / 컬러 팔레트** 임시안 1쌍 — **사용자 작업** (현재 라이트 임시: 슬레이트 950 + 인디고 300)
 - [x] **와이어프레임 3화면**: [WIREFRAMES.md](./WIREFRAMES.md)
 - [x] Repo 부트스트랩 — Vite + React + TS + Tailwind + ESLint + Prettier + Vitest + vite-plugin-pwa
 - [x] git 초기화 (local `main`)
-- [ ] GitHub remote 생성 + 푸시 — **사용자 작업**
-- [ ] Cloudflare Pages 연결 — **사용자 작업**
+- [x] GitHub remote 생성 + 푸시 (`github.com/littleanti/wordrobe`)
+- [x] GitHub Pages 연결 (Settings → Pages → Source = GitHub Actions)
 - [x] TRD §13 결정 사항 확정:
   - D-01 Android 패키징 → **Capacitor** (iOS와 통일)
   - D-02 익스텐션 저장소 → **iframe-bridge** (IndexedDB 단일 소스)
 
 ### 종료 조건
 - `npm run dev` 로 3-탭 셸이 뜬다 ✅ (이번 세션에서 검증)
-- `main` 푸시 시 Cloudflare Pages 자동 배포 확인 — 사용자 작업 후 검증
+- `main` 푸시 시 GitHub Actions가 GitHub Pages로 자동 배포 ✅ (2026-06-01 검증)
 
 ---
 
@@ -52,9 +53,10 @@
 ### 4.1 작업 분해
 
 **[A] 인프라**
-- [x] PWA manifest + 아이콘셋 (192/512) — manifest 등록, 아이콘은 임시 SVG (PNG 192/512 추후)
-- [x] vite-plugin-pwa, Workbox precache
-- [x] CSP 헤더 (`public/_headers`)
+- [x] PWA manifest + 아이콘셋 (192/512), `/wordrobe/` 서브패스 기준 `start_url`/`scope`/아이콘 경로
+- [x] vite-plugin-pwa, Workbox precache (`navigateFallback: /wordrobe/index.html`, SW 등록은 `injectRegister: 'script'`로 CSP 안전)
+- [x] CSP — `index.html` meta 태그로 적용 (GitHub Pages가 `_headers` 무시 → `public/_headers` 제거), referrer no-referrer
+- [x] 폰트 self-hosting (외부 CDN 제거 + 시스템 폰트 스택)
 
 **[B] 저장소 레이어**
 - [x] Dexie 스키마 (`phrases`, `persona`) + Settings는 localStorage
@@ -62,14 +64,14 @@
 - [x] JSON export/import
 
 **[C] LLM 클라이언트**
-- [x] `@google/genai` 통합 (`src/lib/gemini.ts`)
+- [x] `@google/genai` **2.7.0** 통합 (`src/lib/gemini.ts`), 동적 `import()`로 lazy 코드 스플릿
 - [x] 스트리밍 응답 처리 (`stream()` async generator)
 - [x] 키 마스킹 + 에러 분류 (401/429/5xx/network/unknown)
-- [x] CSP `connect-src` 화이트리스트
+- [x] CSP `connect-src` 화이트리스트 (`generativelanguage.googleapis.com`)
 
 **[D] 페르소나 엔진**
 - [x] 분석 프롬프트 v1 (`src/lib/prompts.ts`)
-- [x] 구조화 출력(`responseSchema`) → PERSONA.md 렌더러
+- [x] JSON 출력 → PERSONA.md 렌더러 (Gemma는 `responseSchema` 미지원 → 프롬프트 JSON 지시 + `extractJson` 파싱)
 - [x] 디바운스 (30초, `scheduleAutoAnalyze`)
 - [x] 수동 트리거 버튼 (페르소나 페이지)
 - [ ] 증분 캐시 (현재는 전체 분석 — 비용 체감 후 결정, D-03)
@@ -91,7 +93,7 @@
 
 ### 4.2 종료 조건
 - 자기 자신이 일주일 dogfood 가능 (글귀 10개 이상 저장, 매일 2~3회 변환)
-- `wordrobe.app` (또는 임시 도메인)에서 정상 동작
+- `littleanti.github.io/wordrobe` 에서 정상 동작
 - 초기 사용자가 README만 보고 1분 안에 API 키 등록 → 첫 변환 도달
 
 ---
@@ -178,8 +180,8 @@ P2 (M1 끝에 시간 남으면)
 | 변환 품질이 기대 미달 | Retention 저하 | 페르소나 분석 프롬프트 A/B + Pro 모델 토글 |
 | iOS Share Extension 빌드 환경 (Mac 필요) | M3 지연 | M3 전에 Mac 임대/구입 결정 |
 | Chrome Web Store 심사 거부 (권한 과다) | M2 지연 | 권한을 최소화, 명세에 사유 명기 |
-| 도메인 `wordrobe.app` 선점 가능성 | 브랜드 손실 | M0 1일차에 확보. 차순위: `wordrobe.io`, `wordrobeapp.com` |
-| 사용자가 키를 분실/노출 | 비용 폭주 | 키 입력 시 "Google 콘솔에서 도메인 잠금 권장" 안내 |
+| 커스텀 도메인 (`wordrobe.app`) 미확보 | 브랜드 약화 | 당장은 GitHub Pages 서브패스(`littleanti.github.io/wordrobe`)로 출시. 도메인은 향후 옵션. |
+| 사용자가 키를 분실/노출 | 비용 폭주 | 온보딩에서 전용 키 + Gemini API only + referrer `littleanti.github.io/wordrobe/*` 제한 + 예산/쿼터 안내 |
 
 ---
 
@@ -211,11 +213,11 @@ Week 9        : M4 (출시) ── 스토어 심사 대기 포함
 
 ## 12. 다음 액션 (오늘 / 내일)
 
-1. 앱 이름 후보 5개를 30분 안에 도메인·상표·발음 기준으로 검증 → 확정.
-2. Figma에 와이어프레임 3화면 그리기.
-3. GitHub repo 생성 + Vite/React/TS 부트스트랩 커밋.
-4. Cloudflare Pages 연결.
-5. Gemini API 키 받아 `@google/genai` "hello world" 호출 한 번 성공.
+1. ~~앱 이름 확정~~ ✅ Wordrobe
+2. ~~와이어프레임 3화면~~ ✅ ([WIREFRAMES.md](./WIREFRAMES.md))
+3. ~~GitHub repo + Vite/React/TS 부트스트랩~~ ✅
+4. ~~호스팅 연결~~ ✅ GitHub Pages (GitHub Actions 배포)
+5. ~~`@google/genai` 호출 성공~~ ✅ → 다음: 실제 키로 persona/compose E2E dogfood, M2(크롬 익스텐션) 착수.
 
 ---
 
