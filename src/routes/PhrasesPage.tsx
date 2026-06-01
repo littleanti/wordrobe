@@ -2,8 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { phraseRepo } from '../lib/repos/phraseRepo';
 import { useApp } from '../lib/store';
 import { useT } from '../lib/i18n';
-import { exportAll, downloadJson, importAll, readJsonFile } from '../lib/export';
-import type { ExportPayload, Phrase } from '../lib/types';
+import type { Phrase } from '../lib/types';
 import PhraseAddDialog from '../components/PhraseAddDialog';
 import PhraseCard from '../components/PhraseCard';
 
@@ -18,7 +17,6 @@ export default function PhrasesPage() {
   const [query, setQuery] = useState('');
   const [adding, setAdding] = useState(false);
   const [activeTag, setActiveTag] = useState<string | null>(null);
-  const [menuOpen, setMenuOpen] = useState(false);
   const pushToast = useApp((s) => s.pushToast);
   const t = useT();
 
@@ -36,26 +34,6 @@ export default function PhrasesPage() {
     await phraseRepo.remove(id);
     pushToast(t('phrases.deletedToast'), 'info');
     refresh();
-  };
-
-  const onExport = async () => {
-    const payload = await exportAll();
-    downloadJson(`wordrobe-${new Date().toISOString().slice(0, 10)}.json`, payload);
-    pushToast(t('phrases.exportedToast'), 'success');
-    setMenuOpen(false);
-  };
-
-  const onImport = async (file: File) => {
-    try {
-      const payload = (await readJsonFile(file)) as ExportPayload;
-      const replace = confirm(t('phrases.confirmImport'));
-      await importAll(payload, { replace });
-      pushToast(t('phrases.importDone'), 'success');
-      refresh();
-    } catch (err) {
-      pushToast(t('phrases.importFailed', { msg: (err as Error).message }), 'error');
-    }
-    setMenuOpen(false);
   };
 
   const allTags = phrases ? getAllTags(phrases) : [];
@@ -87,50 +65,6 @@ export default function PhrasesPage() {
               placeholder={t('phrases.searchPlaceholder')}
               className="w-full bg-white border border-slate-200 rounded-full pl-10 pr-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-500 transition-colors shadow-soft-sm"
             />
-          </div>
-
-          {/* Dot menu */}
-          <div className="relative">
-            <button
-              onClick={() => setMenuOpen((v) => !v)}
-              className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-700 transition-colors shadow-soft-sm"
-              aria-label={t('common.more')}
-            >
-              <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                <circle cx="12" cy="5" r="1.5" />
-                <circle cx="12" cy="12" r="1.5" />
-                <circle cx="12" cy="19" r="1.5" />
-              </svg>
-            </button>
-            {menuOpen && (
-              <>
-                <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-                <div className="absolute right-0 top-12 z-20 bg-white border border-slate-200 rounded-2xl shadow-soft-lg py-1.5 min-w-[140px]">
-                  <div className="px-4 py-1.5 text-xs text-slate-400 border-b border-slate-200 mb-1">
-                    {phrases ? t('phrases.countSuffix', { n: phrases.length }) : '...'}
-                  </div>
-                  <button
-                    onClick={onExport}
-                    className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
-                  >
-                    {t('phrases.export')}
-                  </button>
-                  <label className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer">
-                    {t('phrases.import')}
-                    <input
-                      type="file"
-                      accept="application/json"
-                      className="hidden"
-                      onChange={(e) => {
-                        const f = e.target.files?.[0];
-                        if (f) onImport(f);
-                        e.target.value = '';
-                      }}
-                    />
-                  </label>
-                </div>
-              </>
-            )}
           </div>
 
           {/* FAB add button */}

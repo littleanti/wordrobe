@@ -3,6 +3,7 @@ import { NavLink, Navigate, Route, Routes } from 'react-router-dom';
 import PhrasesPage from './routes/PhrasesPage';
 import PersonaPage from './routes/PersonaPage';
 import ComposePage from './routes/ComposePage';
+import SettingsPage from '@/routes/SettingsPage';
 import OnboardingModal from './components/OnboardingModal';
 import ToastContainer from './components/Toast';
 import ApiKeyStatus from './components/ApiKeyStatus';
@@ -42,6 +43,16 @@ const tabs = [
       </svg>
     ),
   },
+  {
+    to: '/settings',
+    labelKey: 'nav.settings',
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+        <circle cx="12" cy="12" r="3" />
+        <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3h.1a1.7 1.7 0 0 0 .9-1.6V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9v.1a1.7 1.7 0 0 0 1.6.9H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5.9z" />
+      </svg>
+    ),
+  },
 ];
 
 export default function App() {
@@ -71,6 +82,7 @@ export default function App() {
           <Route path="/phrases" element={<PhrasesPage />} />
           <Route path="/persona" element={<PersonaPage />} />
           <Route path="/compose" element={<ComposePage />} />
+          <Route path="/settings" element={<SettingsPage />} />
         </Routes>
       </main>
 
