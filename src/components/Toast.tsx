@@ -1,4 +1,4 @@
-import { useApp } from '../lib/store';
+import { useApp } from '@/lib/store';
 
 export default function ToastContainer() {
   const toasts = useApp((s) => s.toasts);

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { settingsRepo } from './repos/settingsRepo';
-import type { Settings } from './types';
+import { settingsRepo } from '@/lib/repos/settingsRepo';
+import type { Settings } from '@/lib/types';
 
 export interface ToastEntry {
   id: number;

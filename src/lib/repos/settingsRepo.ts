@@ -1,4 +1,4 @@
-import { DEFAULT_SETTINGS, type Settings } from '../types';
+import { DEFAULT_SETTINGS, type Settings } from '@/lib/types';
 
 const KEY = 'wordrobe.settings';
 

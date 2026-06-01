@@ -1,7 +1,7 @@
-import { personaRepo } from './repos/personaRepo';
-import { phraseRepo } from './repos/phraseRepo';
-import { tStatic } from './i18n';
-import type { ExportPayload, Phrase, PersonaMemory } from './types';
+import { personaRepo } from '@/lib/repos/personaRepo';
+import { phraseRepo } from '@/lib/repos/phraseRepo';
+import { tStatic } from '@/lib/i18n';
+import type { ExportPayload, Phrase, PersonaMemory } from '@/lib/types';
 
 export async function exportAll(): Promise<ExportPayload> {
   const [phrases, persona] = await Promise.all([phraseRepo.list(), personaRepo.getLatest()]);

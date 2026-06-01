@@ -1,5 +1,5 @@
-import { db } from '../db';
-import type { PersonaMemory } from '../types';
+import { db } from '@/lib/db';
+import type { PersonaMemory } from '@/lib/types';
 
 export const personaRepo = {
   async getLatest(): Promise<PersonaMemory | undefined> {

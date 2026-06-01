@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { personaRepo } from '../lib/repos/personaRepo';
-import { buildComposePrompt, parseComposeVariants } from '../lib/prompts';
-import { useApp } from '../lib/store';
-import { useT, resolveContentLocale } from '../lib/i18n';
-import type { PersonaMemory } from '../lib/types';
+import { personaRepo } from '@/lib/repos/personaRepo';
+import { buildComposePrompt, parseComposeVariants } from '@/lib/prompts';
+import { useApp } from '@/lib/store';
+import { useT, resolveContentLocale } from '@/lib/i18n';
+import type { PersonaMemory } from '@/lib/types';
 
 export default function ComposePage() {
   const settings = useApp((s) => s.settings);
@@ -33,7 +33,7 @@ export default function ComposePage() {
     setRawOutput('');
     setStreaming(true);
     try {
-      const { GeminiClient } = await import('../lib/gemini');
+      const { GeminiClient } = await import('@/lib/gemini');
       const client = new GeminiClient({ apiKey: settings.apiKey });
       const prompt = buildComposePrompt(persona, trimmed, variantCount, resolveContentLocale(settings));
       let acc = '';

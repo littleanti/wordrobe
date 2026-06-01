@@ -1,4 +1,4 @@
-import type { PersonaMemory, Phrase } from './types';
+import type { PersonaMemory, Phrase } from '@/lib/types';
 
 export function buildPersonaAnalysisUserPrompt(phrases: Phrase[]): string {
   const lines = phrases.map((p, i) => {

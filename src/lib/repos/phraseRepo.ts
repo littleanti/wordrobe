@@ -1,6 +1,6 @@
 import { ulid } from 'ulid';
-import { db } from '../db';
-import type { Phrase } from '../types';
+import { db } from '@/lib/db';
+import type { Phrase } from '@/lib/types';
 
 export const phraseRepo = {
   async add(input: Omit<Phrase, 'id' | 'capturedAt'> & { capturedAt?: number }): Promise<Phrase> {

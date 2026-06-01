@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import type { Phrase } from '../lib/types';
-import { useT, type TFn } from '../lib/i18n';
+import type { Phrase } from '@/lib/types';
+import { useT, type TFn } from '@/lib/i18n';
 
 interface Props {
   phrase: Phrase;

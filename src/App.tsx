@@ -1,15 +1,15 @@
 import { useEffect } from 'react';
 import { NavLink, Navigate, Route, Routes } from 'react-router-dom';
-import PhrasesPage from './routes/PhrasesPage';
-import PersonaPage from './routes/PersonaPage';
-import ComposePage from './routes/ComposePage';
+import PhrasesPage from '@/routes/PhrasesPage';
+import PersonaPage from '@/routes/PersonaPage';
+import ComposePage from '@/routes/ComposePage';
 import SettingsPage from '@/routes/SettingsPage';
-import OnboardingModal from './components/OnboardingModal';
-import ToastContainer from './components/Toast';
-import ApiKeyStatus from './components/ApiKeyStatus';
-import LanguageToggle from './components/LanguageToggle';
-import { useApp } from './lib/store';
-import { useT } from './lib/i18n';
+import OnboardingModal from '@/components/OnboardingModal';
+import ToastContainer from '@/components/Toast';
+import ApiKeyStatus from '@/components/ApiKeyStatus';
+import LanguageToggle from '@/components/LanguageToggle';
+import { useApp } from '@/lib/store';
+import { useT } from '@/lib/i18n';
 import { APP_LOGO_SRC } from '@/lib/assets';
 
 const tabs = [

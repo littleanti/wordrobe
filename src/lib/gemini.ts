@@ -1,6 +1,6 @@
 import { GoogleGenAI } from '@google/genai';
-import { tStatic } from './i18n';
-import { MODEL_ID } from './types';
+import { tStatic } from '@/lib/i18n';
+import { MODEL_ID } from '@/lib/types';
 
 export class GeminiError extends Error {
   constructor(

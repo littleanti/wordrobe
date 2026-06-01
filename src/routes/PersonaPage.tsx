@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { personaRepo } from '../lib/repos/personaRepo';
-import { phraseRepo } from '../lib/repos/phraseRepo';
-import { analyzeAndUpdatePersona } from '../lib/persona';
-import { useApp } from '../lib/store';
-import { useT, useLocale, type UiLocale } from '../lib/i18n';
-import type { PersonaMemory } from '../lib/types';
+import { personaRepo } from '@/lib/repos/personaRepo';
+import { phraseRepo } from '@/lib/repos/phraseRepo';
+import { analyzeAndUpdatePersona } from '@/lib/persona';
+import { useApp } from '@/lib/store';
+import { useT, useLocale, type UiLocale } from '@/lib/i18n';
+import type { PersonaMemory } from '@/lib/types';
 
 function formatTime(ts: number, locale: UiLocale): string {
   const d = new Date(ts);

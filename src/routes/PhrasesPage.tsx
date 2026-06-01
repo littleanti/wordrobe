@@ -1,10 +1,10 @@
 import { useEffect, useState, useCallback } from 'react';
-import { phraseRepo } from '../lib/repos/phraseRepo';
-import { useApp } from '../lib/store';
-import { useT } from '../lib/i18n';
-import type { Phrase } from '../lib/types';
-import PhraseAddDialog from '../components/PhraseAddDialog';
-import PhraseCard from '../components/PhraseCard';
+import { phraseRepo } from '@/lib/repos/phraseRepo';
+import { useApp } from '@/lib/store';
+import { useT } from '@/lib/i18n';
+import type { Phrase } from '@/lib/types';
+import PhraseAddDialog from '@/components/PhraseAddDialog';
+import PhraseCard from '@/components/PhraseCard';
 
 function getAllTags(phrases: Phrase[]): string[] {
   const set = new Set<string>();

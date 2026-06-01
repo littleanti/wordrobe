@@ -1,4 +1,4 @@
-import { useApp } from './store';
+import { useApp } from '@/lib/store';
 
 export type UiLocale = 'ko' | 'en';
 

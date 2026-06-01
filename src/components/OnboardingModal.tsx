@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useApp } from '../lib/store';
-import { useT } from '../lib/i18n';
+import { useApp } from '@/lib/store';
+import { useT } from '@/lib/i18n';
 
 export default function OnboardingModal() {
   const settings = useApp((s) => s.settings);

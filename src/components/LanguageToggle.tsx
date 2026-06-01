@@ -1,5 +1,5 @@
-import { useApp } from '../lib/store';
-import type { UiLocale } from '../lib/i18n';
+import { useApp } from '@/lib/store';
+import type { UiLocale } from '@/lib/i18n';
 
 const OPTIONS: { value: UiLocale; label: string }[] = [
   { value: 'ko', label: '한' },

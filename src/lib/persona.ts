@@ -1,11 +1,11 @@
 import {
   buildPersonaAnalysisUserPrompt,
   renderPersonaMarkdown,
-} from './prompts';
-import { personaRepo } from './repos/personaRepo';
-import { phraseRepo } from './repos/phraseRepo';
-import { tStatic } from './i18n';
-import type { PersonaAnalysisJson, PersonaMemory, Settings } from './types';
+} from '@/lib/prompts';
+import { personaRepo } from '@/lib/repos/personaRepo';
+import { phraseRepo } from '@/lib/repos/phraseRepo';
+import { tStatic } from '@/lib/i18n';
+import type { PersonaAnalysisJson, PersonaMemory, Settings } from '@/lib/types';
 
 export interface AnalyzeResult {
   status: 'ok' | 'skipped';
@@ -25,7 +25,7 @@ export async function analyzeAndUpdatePersona(settings: Settings): Promise<Analy
     return { status: 'skipped', reason: tStatic('persona.skipNoKey') };
   }
 
-  const { GeminiClient } = await import('./gemini');
+  const { GeminiClient } = await import('@/lib/gemini');
   const client = new GeminiClient({ apiKey: settings.apiKey });
   const prompt = buildPersonaAnalysisUserPrompt(phrases);
   const analysis = await client.generateJson<PersonaAnalysisJson>(prompt);

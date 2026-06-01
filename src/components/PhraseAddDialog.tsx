@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react';
-import { phraseRepo } from '../lib/repos/phraseRepo';
-import { useApp } from '../lib/store';
-import { useT } from '../lib/i18n';
-import { scheduleAutoAnalyze } from '../lib/persona';
+import { phraseRepo } from '@/lib/repos/phraseRepo';
+import { useApp } from '@/lib/store';
+import { useT } from '@/lib/i18n';
+import { scheduleAutoAnalyze } from '@/lib/persona';
 
 interface Props {
   open: boolean;

@@ -1,5 +1,5 @@
 import Dexie, { type Table } from 'dexie';
-import type { Phrase, PersonaMemory } from './types';
+import type { Phrase, PersonaMemory } from '@/lib/types';
 
 class WordrobeDB extends Dexie {
   phrases!: Table<Phrase, string>;
