@@ -25,7 +25,9 @@ const ko: Dict = {
   'apiStatus.ready': 'Gemini 준비됨',
   'apiStatus.newKeyPlaceholder': '새 API 키',
   'apiStatus.changeKey': 'API 키 변경',
+  'apiStatus.deleteKey': 'API 키 삭제',
   'toast.apiKeyUpdated': 'API 키를 갱신했습니다.',
+  'toast.apiKeyDeleted': 'API 키를 삭제했습니다.',
 
   // onboarding
   'onboarding.enterKey': 'API 키를 입력해주세요.',
@@ -36,8 +38,14 @@ const ko: Dict = {
   'onboarding.desc': '변환은 Google AI Studio (Gemini) 를 사용합니다. 본인 API 키를 입력해주세요.',
   'onboarding.keyLabel': 'Gemini API Key',
   'onboarding.getKey': 'AI Studio에서 키 발급받기',
-  'onboarding.privacyNote': '본 기기에만 저장되며, 외부 서버로 전송되지 않음을 이해했습니다. (LLM 호출은 브라우저 → Google 직통)',
+  'onboarding.privacyNote': '입력 텍스트와 API 키가 Google Gemini로 전송되고, 로컬 데이터는 브라우저 삭제·기기 변경 시 복구할 수 없음을 이해했습니다.',
   'onboarding.start': '시작하기',
+  'onboarding.guideTitle': '시작하기 전에',
+  'onboarding.guideStorage': 'API 키·글귀·페르소나는 이 브라우저(localStorage/IndexedDB)에만 저장되며, 앱 서버로는 전송되지 않습니다.',
+  'onboarding.guideTransmit': '페르소나 분석·변환 시 입력 텍스트와 API 키가 Google Gemini API로 직접 전송됩니다 (브라우저 → Google 직통).',
+  'onboarding.guideKeyRestrict': 'Google AI Studio 또는 Cloud Console에서 전용 키를 발급하고 Gemini API만 허용하도록 제한하세요. 가능하면 HTTP Referrer를 https://littleanti.github.io/wordrobe/* 로 제한하면 더 안전합니다.',
+  'onboarding.guideQuota': '예산·사용량 알림을 설정해 의도치 않은 과금을 방지하세요.',
+  'onboarding.guideDataLoss': '브라우저 데이터 삭제·시크릿 모드 종료·기기 변경 시 글귀·페르소나·키는 복구할 수 없습니다. 필요하면 내보내기로 미리 백업해두세요.',
 
   // phrase card
   'phraseCard.directInput': '직접 입력',
@@ -147,7 +155,9 @@ const en: Dict = {
   'apiStatus.ready': 'Gemini ready',
   'apiStatus.newKeyPlaceholder': 'New API key',
   'apiStatus.changeKey': 'Change API key',
+  'apiStatus.deleteKey': 'Delete API key',
   'toast.apiKeyUpdated': 'API key updated.',
+  'toast.apiKeyDeleted': 'API key deleted.',
 
   // onboarding
   'onboarding.enterKey': 'Please enter your API key.',
@@ -158,8 +168,14 @@ const en: Dict = {
   'onboarding.desc': 'Compose uses Google AI Studio (Gemini). Please enter your own API key.',
   'onboarding.keyLabel': 'Gemini API Key',
   'onboarding.getKey': 'Get a key from AI Studio',
-  'onboarding.privacyNote': 'I understand it is stored only on this device and never sent to external servers. (LLM calls go browser → Google directly.)',
+  'onboarding.privacyNote': 'I understand that my input text and API key are sent to Google Gemini, and that local data cannot be recovered after browser data deletion or a device change.',
   'onboarding.start': 'Get started',
+  'onboarding.guideTitle': 'Before you start',
+  'onboarding.guideStorage': 'Your API key, phrases, and persona are stored only in this browser (localStorage/IndexedDB) and are never sent to any app server.',
+  'onboarding.guideTransmit': 'When analyzing your persona or composing, your input text and API key are sent directly to the Google Gemini API (browser → Google directly).',
+  'onboarding.guideKeyRestrict': 'Issue a dedicated key in Google AI Studio or Cloud Console and restrict it to Gemini API only. For extra safety, limit the HTTP Referrer to https://littleanti.github.io/wordrobe/*.',
+  'onboarding.guideQuota': 'Set budget and usage alerts to prevent unexpected charges.',
+  'onboarding.guideDataLoss': 'Phrases, persona, and your API key cannot be recovered after clearing browser data, ending a private session, or switching devices. Export a backup beforehand if needed.',
 
   // phrase card
   'phraseCard.directInput': 'Manual entry',

@@ -48,6 +48,18 @@ export default function ApiKeyStatus() {
           <button onClick={() => setEditing(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
             {t('common.cancel')}
           </button>
+          <button
+            onClick={() => {
+              setSettings({ apiKey: '' });
+              pushToast(t('toast.apiKeyDeleted'), 'success');
+              setEditing(false);
+              setNext('');
+            }}
+            title={t('apiStatus.deleteKey')}
+            className="text-red-400 hover:text-red-600 font-medium transition-colors"
+          >
+            {t('common.delete')}
+          </button>
         </>
       ) : (
         <button

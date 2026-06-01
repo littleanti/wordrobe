@@ -37,7 +37,7 @@ export default function OnboardingModal() {
 
       <div className="relative max-w-md w-full bg-white border border-slate-200 rounded-2xl p-8 shadow-soft-lg">
         <div className="text-center mb-8">
-          <img src="/logo.png" alt="" className="mx-auto mb-4 h-16 w-16 object-contain" />
+          <img src={`${import.meta.env.BASE_URL}logo.png`} alt="" className="mx-auto mb-4 h-16 w-16 object-contain" />
           <h2 className="text-2xl font-bold text-slate-900 mb-1">{t('onboarding.welcomeTitle')}</h2>
           <p className="text-sm text-slate-500">{t('onboarding.subtitle')}</p>
         </div>
@@ -71,6 +71,17 @@ export default function OnboardingModal() {
           </svg>
           {t('onboarding.getKey')}
         </a>
+
+        <div className="mb-6 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3">
+          <p className="text-xs font-semibold text-slate-600 mb-2">{t('onboarding.guideTitle')}</p>
+          <ul className="space-y-1.5 text-xs text-slate-500 leading-relaxed list-disc list-inside">
+            <li>{t('onboarding.guideStorage')}</li>
+            <li>{t('onboarding.guideTransmit')}</li>
+            <li>{t('onboarding.guideKeyRestrict')}</li>
+            <li>{t('onboarding.guideQuota')}</li>
+            <li>{t('onboarding.guideDataLoss')}</li>
+          </ul>
+        </div>
 
         <label className="flex items-start gap-3 mb-6 text-xs text-slate-500 cursor-pointer">
           <input
