@@ -31,7 +31,7 @@ export default function ApiKeyStatus() {
               if (e.key === 'Escape') setEditing(false);
             }}
             placeholder={t('apiStatus.newKeyPlaceholder')}
-            className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs w-36 text-slate-900 focus:outline-none focus:border-indigo-500 transition-colors"
+            className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs w-32 text-slate-900 focus:outline-none focus:border-indigo-500 transition-colors"
           />
           <button
             onClick={() => {
@@ -68,7 +68,7 @@ export default function ApiKeyStatus() {
           title={t('apiStatus.changeKey')}
         >
           <span className="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0" />
-          <span className="text-slate-500 group-hover:text-slate-700 transition-colors font-medium">{t('apiStatus.ready')}</span>
+          <span className="text-slate-500 group-hover:text-slate-700 transition-colors font-medium whitespace-nowrap">{t('apiStatus.ready')}</span>
         </button>
       )}
     </div>

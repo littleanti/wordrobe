@@ -302,6 +302,8 @@ Task:
 | 라우팅 | **HashRouter** — Pages 서브패스에서 SPA 404 회피 (404.html 셈 불필요) |
 | CI/CD | **GitHub Actions** (`.github/workflows/deploy-pages.yml`): `npm ci → npm test → npm run build → upload-pages-artifact → deploy-pages`. main push + workflow_dispatch 트리거. Pages Source = "GitHub Actions". |
 | 자산 경로 | 절대경로 대신 `import.meta.env.BASE_URL` 기준 (예: 로고), 아이콘은 `./` 상대경로 |
+| 주소창 색 | `index.html`의 `<meta name="theme-color">`를 브랜드 테마색 `#6366f1`로 통일 (PWA manifest `theme_color`와 일치). 모바일 Chrome 주소 표시창이 흰색 대신 테마색으로 표시 (persora 동일 방식) |
+| 헤더 레이아웃 | 좌측 로고+타이틀 `min-w-0`+`truncate`(+로고 `flex-shrink-0`), 우측 액션 그룹(API 상태/언어) `flex-shrink-0`. API 키 편집 시 타이틀이 줄어들며 저장/취소/삭제가 한 줄로 가로 정렬 (persora `App.tsx`/`ApiKeyStatus.tsx` 동일) |
 | 모니터링 | 클라이언트 Sentry (옵션, 키 마스킹 필터 필수) |
 | 익명 분석 | (미도입) |
 
@@ -317,6 +319,7 @@ Task:
 | D-04 | 호스팅 → **GitHub Pages** (`littleanti.github.io/wordrobe`) | ✅ 확정 2026-06-01. 기존 Cloudflare Pages/`wordrobe.app` 안 대체. Vite base `/wordrobe/` + GitHub Actions 배포. |
 | D-05 | LLM 모델 → **단일 `gemini-3.1-flash-lite`** | ✅ 확정. 모델 선택 UI 제거, `MODEL_ID` 단일 관리. |
 | D-06 | LLM SDK → **`@google/genai` 2.x + lazy 스플릿** | ✅ 확정 2026-06-01. 0.3.1 취약점 해소 + 초기 번들 절감. |
+| D-07 | 헤더 정렬 + 주소창 테마색 → **persora 동일화** | ✅ 확정 2026-06-02. `theme-color` `#f8fafc`→`#6366f1`. 헤더 `min-w-0`/`truncate`/`flex-shrink-0`로 API 키 편집 시 저장/취소/삭제 한 줄 가로 정렬. |
 
 ---
 

@@ -54,11 +54,11 @@ export default function App() {
   return (
     <div className="min-h-dvh flex flex-col bg-slate-50">
       <header className="px-5 py-3 flex items-center justify-between gap-4 bg-white/80 backdrop-blur-md sticky top-0 z-30 border-b border-slate-200">
-        <div className="flex items-center gap-2">
-          <img src={`${import.meta.env.BASE_URL}logo.png`} alt="" className="h-8 w-8 object-contain" />
-          <span className="font-semibold tracking-tight text-slate-900">Wordrobe</span>
+        <div className="flex items-center gap-2 min-w-0">
+          <img src={`${import.meta.env.BASE_URL}logo.png`} alt="" className="h-8 w-8 object-contain flex-shrink-0" />
+          <span className="font-semibold tracking-tight text-slate-900 truncate">Wordrobe</span>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-shrink-0">
           <ApiKeyStatus />
           <LanguageToggle />
         </div>
