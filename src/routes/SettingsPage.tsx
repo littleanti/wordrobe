@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useT } from '@/lib/i18n';
 import { useApp } from '@/lib/store';
 import { clearAllLocalAppData } from '@/lib/dataManagement';
@@ -7,6 +8,7 @@ import { DEFAULT_SETTINGS, type ExportPayload, type Locale } from '@/lib/types';
 
 export default function SettingsPage() {
   const t = useT();
+  const navigate = useNavigate();
   const pushToast = useApp((s) => s.pushToast);
   const settings = useApp((s) => s.settings);
   const setSettings = useApp((s) => s.setSettings);
@@ -36,7 +38,7 @@ export default function SettingsPage() {
       await importAll(payload, { replace });
       pushToast(
         t('settings.toastImported', {
-          phrases: payload.phrases.length,
+          phrases: Array.isArray(payload.phrases) ? payload.phrases.length : 0,
           persona: payload.persona ? 1 : 0,
         }),
         'success',
@@ -56,6 +58,7 @@ export default function SettingsPage() {
       await clearAllLocalAppData();
       setSettings(DEFAULT_SETTINGS);
       pushToast(t('settings.toastCleared'), 'success');
+      navigate('/phrases');
     } catch {
       pushToast(t('settings.toastClearFailed'), 'error');
     } finally {
@@ -126,13 +129,14 @@ export default function SettingsPage() {
           {/* Auto-analyze toggle */}
           <div className="flex items-center justify-between gap-4">
             <div className="min-w-0">
-              <p className="text-sm font-medium text-slate-900">{t('settings.autoAnalyzeTitle')}</p>
+              <p id="auto-analyze-label" className="text-sm font-medium text-slate-900">{t('settings.autoAnalyzeTitle')}</p>
               <p className="text-xs text-slate-500 mt-0.5">{t('settings.autoAnalyzeDesc')}</p>
             </div>
             <button
               type="button"
               role="switch"
               aria-checked={settings.autoAnalyze}
+              aria-labelledby="auto-analyze-label"
               onClick={() => setSettings({ autoAnalyze: !settings.autoAnalyze })}
               className={`relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors ${
                 settings.autoAnalyze ? 'bg-indigo-600' : 'bg-slate-300'
@@ -149,11 +153,12 @@ export default function SettingsPage() {
           {/* Min phrases */}
           <div className="flex items-center justify-between gap-4">
             <div className="min-w-0">
-              <p className="text-sm font-medium text-slate-900">{t('settings.minPhrasesTitle')}</p>
+              <p id="min-phrases-label" className="text-sm font-medium text-slate-900">{t('settings.minPhrasesTitle')}</p>
               <p className="text-xs text-slate-500 mt-0.5">{t('settings.minPhrasesDesc')}</p>
             </div>
             <input
               type="number"
+              aria-labelledby="min-phrases-label"
               min={1}
               max={50}
               value={settings.minPhrasesForAnalysis}
