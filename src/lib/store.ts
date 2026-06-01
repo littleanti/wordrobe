@@ -38,7 +38,3 @@ export const useApp = create<AppState>((set, get) => ({
     set({ toasts: get().toasts.filter((t) => t.id !== id) });
   },
 }));
-
-export function hasApiKey(): boolean {
-  return useApp.getState().settings.apiKey.trim().length > 0;
-}

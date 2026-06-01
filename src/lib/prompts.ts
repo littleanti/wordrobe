@@ -1,9 +1,5 @@
 import type { PersonaMemory, Phrase } from './types';
 
-export const PERSONA_ANALYSIS_SYSTEM = `당신은 한국어/영어 텍스트에서 작가의 톤과 문체를 추출하는 분석가입니다.
-사용자가 모은 글귀들을 보고, 이 사람이 닮고 싶어하는 말투의 특징을 구조화해서 반환합니다.
-판단 근거가 약하면 추측하지 말고 빈 배열을 반환하세요.`;
-
 export function buildPersonaAnalysisUserPrompt(phrases: Phrase[]): string {
   const lines = phrases.map((p, i) => {
     const src = p.sourceUrl ? ` (출처: ${p.sourceUrl})` : '';
@@ -21,17 +17,6 @@ export function buildPersonaAnalysisUserPrompt(phrases: Phrase[]): string {
     '- backgroundTopics: 글귀들이 다루는 도메인/주제 키워드 2-6개',
   ].join('\n');
 }
-
-export const PERSONA_ANALYSIS_SCHEMA = {
-  type: 'OBJECT',
-  properties: {
-    toneKeywords: { type: 'ARRAY', items: { type: 'STRING' } },
-    signaturePhrases: { type: 'ARRAY', items: { type: 'STRING' } },
-    avoidPatterns: { type: 'ARRAY', items: { type: 'STRING' } },
-    backgroundTopics: { type: 'ARRAY', items: { type: 'STRING' } },
-  },
-  required: ['toneKeywords', 'signaturePhrases', 'avoidPatterns', 'backgroundTopics'],
-} as const;
 
 export function renderPersonaMarkdown(
   analysis: {

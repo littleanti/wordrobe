@@ -47,11 +47,6 @@ export interface PersonaAnalysisJson {
   backgroundTopics: string[];
 }
 
-export interface ComposeVariant {
-  index: number;
-  text: string;
-}
-
 export interface ExportPayload {
   schema: 'wordrobe-v1';
   exportedAt: number;
