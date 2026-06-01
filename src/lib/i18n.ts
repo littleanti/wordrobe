@@ -19,6 +19,7 @@ const ko: Dict = {
   'nav.phrases': '글귀',
   'nav.persona': '페르소나',
   'nav.compose': '변환',
+  'app.title': 'Wordrobe',
   'app.docTitle': 'Wordrobe — 내가 닮고 싶은 말의 옷장',
 
   // api key status
@@ -87,6 +88,7 @@ const ko: Dict = {
   'phrases.firstAdd': '첫 글귀 추가하기',
 
   // persona page
+  'persona.subtitle': '내가 모은 글귀로 만든 말투 프로필.',
   'persona.analyzeSkipped': '분석을 건너뛰었습니다.',
   'persona.updatedToast': '페르소나를 갱신했습니다.',
   'persona.manualSaved': '수동 수정 사항을 저장했습니다.',
@@ -103,6 +105,7 @@ const ko: Dict = {
   'persona.editTitle': '페르소나 편집',
 
   // compose page
+  'compose.subtitle': '내 페르소나로 문장을 다시 입혀보세요.',
   'compose.enterText': '변환할 문장을 입력하세요.',
   'compose.copiedToast': '클립보드에 복사했습니다.',
   'compose.copyFailed': '복사에 실패했습니다.',
@@ -126,6 +129,11 @@ const ko: Dict = {
   'error.emptyKey': 'API 키가 비어 있습니다.',
   'error.emptyResponse': '빈 응답을 받았습니다.',
   'error.unsupportedSchema': '지원하지 않는 스키마: {schema}',
+
+  // error boundary
+  'error.boundaryTitle': '문제가 발생했어요',
+  'error.boundaryDesc': '화면을 다시 불러와 주세요. 저장된 데이터는 안전합니다.',
+  'error.boundaryRetry': '다시 시도',
 };
 
 const en: Dict = {
@@ -143,6 +151,7 @@ const en: Dict = {
   'nav.phrases': 'Phrases',
   'nav.persona': 'Persona',
   'nav.compose': 'Compose',
+  'app.title': 'Wordrobe',
   'app.docTitle': 'Wordrobe — a wardrobe of words you admire',
 
   // api key status
@@ -211,6 +220,7 @@ const en: Dict = {
   'phrases.firstAdd': 'Add your first phrase',
 
   // persona page
+  'persona.subtitle': 'A voice profile built from the phrases you collected.',
   'persona.analyzeSkipped': 'Analysis skipped.',
   'persona.updatedToast': 'Persona updated.',
   'persona.manualSaved': 'Manual edits saved.',
@@ -227,6 +237,7 @@ const en: Dict = {
   'persona.editTitle': 'Edit persona',
 
   // compose page
+  'compose.subtitle': 'Re-dress your text in your persona.',
   'compose.enterText': 'Please enter text to transform.',
   'compose.copiedToast': 'Copied to clipboard.',
   'compose.copyFailed': 'Copy failed.',
@@ -250,6 +261,11 @@ const en: Dict = {
   'error.emptyKey': 'API key is empty.',
   'error.emptyResponse': 'Received an empty response.',
   'error.unsupportedSchema': 'Unsupported schema: {schema}',
+
+  // error boundary
+  'error.boundaryTitle': 'Something went wrong',
+  'error.boundaryDesc': 'Please reload the screen. Your saved data is safe.',
+  'error.boundaryRetry': 'Try again',
 };
 
 const dicts: Record<UiLocale, Dict> = { ko, en };

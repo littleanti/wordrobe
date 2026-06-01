@@ -66,6 +66,7 @@ export default function PhrasesPage() {
 
   return (
     <section className="max-w-lg mx-auto px-4 pb-6">
+      {/* 의도적 narrow width: sticky 검색바 UX */}
       {/* Sticky top bar: search + FAB */}
       <div className="sticky top-0 z-20 pt-4 pb-2 bg-slate-50/90 backdrop-blur-md">
         <div className="flex items-center gap-2">

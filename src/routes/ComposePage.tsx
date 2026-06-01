@@ -60,7 +60,12 @@ export default function ComposePage() {
   const indexChips = ['①', '②', '③', '④', '⑤'];
 
   return (
-    <section className="max-w-2xl mx-auto px-4 py-6 space-y-4">
+    <section className="max-w-2xl mx-auto px-4 py-6 space-y-5">
+      <div>
+        <h1 className="text-lg font-bold text-slate-900">{t('nav.compose')}</h1>
+        <p className="text-sm text-slate-500 mt-1">{t('compose.subtitle')}</p>
+      </div>
+
       {/* No persona notice */}
       {!persona && (
         <div className="rounded-2xl px-4 py-3 bg-amber-50 border border-amber-200">
