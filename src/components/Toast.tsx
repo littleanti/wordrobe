@@ -4,7 +4,7 @@ export default function ToastContainer() {
   const toasts = useApp((s) => s.toasts);
   const dismiss = useApp((s) => s.dismissToast);
   return (
-    <div className="fixed bottom-24 right-4 flex flex-col gap-2 z-50">
+    <div className="fixed bottom-24 right-4 flex flex-col gap-2 z-50 max-w-[calc(100vw-2rem)]">
       {toasts.map((t) => (
         <button
           key={t.id}
@@ -20,7 +20,7 @@ export default function ToastContainer() {
                   : 'bg-slate-400'
             }`}
           />
-          {t.message}
+          <span className="break-words">{t.message}</span>
         </button>
       ))}
     </div>

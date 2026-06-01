@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useApp } from '@/lib/store';
 import { useT } from '@/lib/i18n';
+import { GEMINI_API_KEY_HELP_URL } from '@/lib/config';
 
 export default function OnboardingModal() {
   const settings = useApp((s) => s.settings);
@@ -35,11 +36,11 @@ export default function OnboardingModal() {
         <div className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full bg-indigo-300/15 blur-3xl" />
       </div>
 
-      <div className="relative max-w-md w-full bg-white border border-slate-200 rounded-2xl p-8 shadow-soft-lg">
+      <div className="relative max-w-md w-full bg-white border border-slate-200 rounded-2xl p-8 shadow-soft-lg animate-fade-in">
         <div className="text-center mb-8">
-          <img src={`${import.meta.env.BASE_URL}logo.png`} alt="" className="mx-auto mb-4 h-16 w-16 object-contain" />
+          <img src={`${import.meta.env.BASE_URL}logo.png`} alt="" className="mx-auto mb-4 h-16 w-16 rounded-2xl object-cover" />
           <h2 className="text-2xl font-bold text-slate-900 mb-1">{t('onboarding.welcomeTitle')}</h2>
-          <p className="text-sm text-slate-500">{t('onboarding.subtitle')}</p>
+          <p className="text-sm text-slate-500 leading-relaxed">{t('onboarding.subtitle')}</p>
         </div>
 
         <p className="text-sm text-slate-600 mb-6 leading-relaxed">{t('onboarding.desc')}</p>
@@ -59,7 +60,7 @@ export default function OnboardingModal() {
         </div>
 
         <a
-          href="https://aistudio.google.com/apikey"
+          href={GEMINI_API_KEY_HELP_URL}
           target="_blank"
           rel="noreferrer"
           className="flex items-center justify-center gap-2 w-full mt-2 mb-6 py-3 rounded-xl border border-slate-200 text-sm text-slate-600 hover:text-slate-900 hover:border-slate-300 transition-all"
