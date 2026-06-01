@@ -1,4 +1,3 @@
-import { GeminiClient } from './gemini';
 import {
   buildPersonaAnalysisUserPrompt,
   renderPersonaMarkdown,
@@ -26,6 +25,7 @@ export async function analyzeAndUpdatePersona(settings: Settings): Promise<Analy
     return { status: 'skipped', reason: tStatic('persona.skipNoKey') };
   }
 
+  const { GeminiClient } = await import('./gemini');
   const client = new GeminiClient({ apiKey: settings.apiKey });
   const prompt = buildPersonaAnalysisUserPrompt(phrases);
   const analysis = await client.generateJson<PersonaAnalysisJson>(prompt);
